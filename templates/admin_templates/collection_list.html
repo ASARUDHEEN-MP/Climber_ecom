@@ -1,0 +1,68 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+category
+{% endblock %}
+{% block body %}
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">CollectionList</h4>
+          </div>
+          <td class=""><a href="{% url 'add_collection'%}"><button class="btn btn-primary">ADD</button></a> </td>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    NO
+                  </th>
+                  <th>
+                    Product name
+                  </th>
+                  
+                  
+                  <th class="text-right">
+                    category
+                  </th>
+                  <th class="text-right">
+                    qty
+                  </th>
+                  <th class="text-right">
+                    image
+                  </th>
+                  
+                </thead>
+                <tbody>
+                    {% for obj in product %}
+                  <tr>
+                    <td>
+                        {{forloop.counter}}
+                    </td>
+                    <td>
+                        {{obj.name}}
+                    </td>
+                    
+                   
+                    <td class="text-right">
+                      {{obj.category}}
+                  </td>
+                  <td class="text-right">
+                    {{obj.quantity}}
+                </td>
+                    <td><img src="{{obj.image.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
+                     
+                    <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                      <td><a href="deletesss/{{obj.id}}"><button class="btn btn-danger">delete</button></button></a> </td>
+                </tr>
+                  {% endfor %}
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

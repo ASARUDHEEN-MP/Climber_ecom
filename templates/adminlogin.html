@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'images\logo1.png' %}" type="">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/loginn.css'%}" />
+
+<!------ Include the above in your HEAD tag ---------->
+    <title>climber | login</title>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+      
+          <!-- Icon -->
+          <div class="fadeIn first">
+            <h1>Admin</h1>
+            
+            
+          </div>
+          <form method="POST">
+            {%csrf_token%}
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+            <input type="text" id="username" name="username" id="name" class="form-control" placeholder="Username" required data-error="Please enter your name">
+            <input type="text"  name="password" id="password" class="form-control" placeholder="Password" required data-error="Please enter your message subject">
+            <div class="form-group">
+            
+            <input type="submit"  id="submit" class="login-btn" value="Log In">
+          </form>
+          
+            
+            
+      
+
+
+          <div id="formFooter">
+            <a class="underlineHover" href="#">Forgot Password?</a>
+          </div>
+      
+        </div>
+      </div>
+</body>
+
+
+
+
+
+</html>
+

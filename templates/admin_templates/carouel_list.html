@@ -1,0 +1,95 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+category
+{% endblock %}
+{% block body %}
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">CarouselList</h4>
+          </div>
+          <td class=""><a href="{% url 'add_collection'%}"><button class="btn btn-primary">ADD</button></a> </td>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    name
+                  </th>
+                  <th>
+                    Title
+                  </th>
+                  
+                  <th class="text-right">
+                    description
+                  </th>
+                  <th class="text-right">
+                    image
+                  </th>
+                 
+                  
+                </thead>
+                <tbody>
+                  {% for obj in product %}
+                <tr>
+                  <td>
+                      {{obj.name}}
+                  </td>
+                  <td>
+                      {{obj.title}}
+                  </td>
+                  
+                 
+                  <td class="text-right">
+                    {{obj.description}}
+                </td>
+                  <td><img src="{{obj.image1.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
+                   
+                  <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                    
+              </tr>
+              <tr>
+                <td>
+                    {{obj.name}}
+                </td>
+                <td>
+                    {{obj.title}}
+                </td>
+                
+               
+                <td class="text-right">
+                  {{obj.description}}
+              </td>
+                <td><img src="{{obj.image2.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
+                 
+                <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                  
+            </tr>
+            <tr>
+              <td>
+                  {{obj.name}}
+              </td>
+              <td>
+                  {{obj.title}}
+              </td>
+              
+             
+              <td class="text-right">
+                {{obj.description}}
+            </td>
+              <td><img src="{{obj.image3.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
+               
+              <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                
+          </tr>
+                {% endfor %}
+               
+              </tbody>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

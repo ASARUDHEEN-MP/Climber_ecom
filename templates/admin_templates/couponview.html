@@ -1,0 +1,64 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+category
+{% endblock %}
+{% block body %}
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Coupon</h4>
+          </div>
+          <td class=""><a href="{% url 'addcoupon' %}"><button class="btn btn-primary">ADD</button></a> </td>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    coupon_code
+                  </th>
+                  <th>
+                    discount
+                  </th>
+                  
+                  <th class="text-right">
+                    is_active
+                  </th>
+                  
+                 
+                  
+                </thead>
+                <tbody>
+                 {% for item in coup%}
+                <tr>
+                  <td>
+                   {{item.coupon_code}}
+                  </td>
+                  <td>
+                         {{item.discount| stringformat:'d'}}
+                  </td>
+                  <td>
+                    {{item.is_active}}
+                   </td>
+                 <td class="text-right">
+                    
+                
+                  <td><a href="activecp/{{item.pk}}"><button class="btn btn-primary">active</button></button></a> </td>
+                  <td><a href="deactivecp/{{item.id}}"><button class="btn btn-primary">deactive</button></button></a> </td>
+                  <td><a href="deletecp/{{item.id}}"><button class="btn btn-danger">delete</button></button></a> </td>
+                
+                    
+              </tr>
+
+              <tr>
+              
+             {% endfor %}
+               
+              </tbody>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

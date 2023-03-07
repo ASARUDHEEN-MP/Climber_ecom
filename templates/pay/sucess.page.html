@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Payment Processing Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: green;
+		}
+		#pay {
+			background-color: white;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			max-width: 600px;
+			margin: 0 auto;
+            margin-top: 300px;
+		}
+		
+		
+		
+        h2{
+            color: #45a049;
+            /* padding: 50px;
+            border-radius: 10px;
+			
+			margin: 0 auto; */
+
+        }
+        .icon {
+            
+            width: 130px;
+            height: 30px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 30px;
+            border: 1px solid #000;
+            border-radius: 50%;
+          }
+	</style>
+</head>
+<body>
+   
+        
+            
+          
+      
+	<div class="mt-5" id="pay">
+       
+        <div class="text-center">
+            
+            <span class="icon">&#x2714;</span>
+
+            
+        <h2> Payment is successfull</h2>
+        </div>
+        <div class="ml-2 text-center">
+            <a href="{% url 'index' %}"><button class="btn btn-primary w-100 mt-4 mb-4 " id="rzp-button1">done</button></a>
+        </div>
+        
+           
+    
+        <!-- <button id="rzp-button1">Pay</button> -->
+        
+		
+	</div>
+   
+</body>
+</html>
+

@@ -1,0 +1,94 @@
+{% extends 'localbase.html'%}
+
+{% block title %}Edit Details{% endblock %}
+{% block body %}
+<div class="col-xl-8 mx-auto">
+    <!-- Account details card-->
+
+<hr class="mt-0 mb-4">
+  <div class="card mb-4">
+        <div class="card-header">Edit Details
+            <a href="{% url 'userdetails' %}" class="btn btn-warning float-end text-white"><i class="fa fa-reply"> </i>Back</a>
+        </div>
+        
+        <div class="card-body">
+            <form method="post">
+                {%csrf_token%}
+                
+                {% comment %} <label class="small mb-1" >HOME / OFFICE</label> {% endcomment %}
+                {% comment %} <select class="mb-3" name="delivery_point" id="category" >
+                           
+                            <option>HOME</option>
+                            <option>OFFICE</option>
+                           
+                        </select> {% endcomment %}
+                <!-- Form Group (username)-->
+                <div class="mb-3">
+                    <label class="small mb-1 float-left">First Name</label>
+                    <input class="form-control" id="inputUsername" type="text"  name="fname" placeholder="Enter your fullname" value="{{address.fname}}" >
+                </div>
+                <div class="mb-3">
+                    <label class="small mb-1 float-left">Last Name</label>
+                    <input class="form-control" id="inputUsername" type="text"  name="lname" placeholder="Enter your fullname" value="{{address.lname}}">
+                </div>
+                <!-- Form Row-->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (first name)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left"  >Mobile</label>
+                        <input class="form-control"  name="phone" id="inputFirstName" type="text" placeholder="Enter your mobile nimber"value="{{address.phone}}" >
+                    </div>
+                    <!-- Form Group (last name)-->
+                    <div class="col-md-6">
+                        
+                </div>
+                <!-- Form Row        -->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (organization name)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Address</label>
+                        <input class="form-control" id="inputOrgName"  name="address" type="text" value="{{address.address}}" >
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >State</label>
+                        <input class="form-control" name="state" id="inputLastName" type="text" value="{{address.state}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Email</label>
+                        <input class="form-control" id="inputOrgName"  name="email" type="text" value="{{address.email}}" >
+                    </div>
+                    <!-- Form Group (location)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >City</label>
+                        <input class="form-control" id="inputLocation"name="city" type="text" value="{{address.city}}" >
+                    </div>
+                </div>
+                <!-- Form Group (email address)-->
+               
+                <!-- Form Row-->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (phone number)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Country</label>
+                        <input class="form-control" name="country" id="inputPhone" type="tel" value="{{address.country}}" >
+                    </div>
+                    <!-- Form Group (birthday)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left">pincode</label>
+                        <input class="form-control" id="inputBirthday" type="text" name="pincode" value="{{address.pincode}}" >
+                    </div>
+                </div>
+                 <!-- Save changes button-->
+            
+
+
+        </div>
+        <button class="btn btn-primary btn-lg float-right" value="submit" type="submit">UPDATE</button>
+      
+
+</form></center>  
+    </div>
+    
+</div>
+
+{% endblock %}

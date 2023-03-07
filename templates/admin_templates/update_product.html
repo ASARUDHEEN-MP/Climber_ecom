@@ -1,0 +1,21 @@
+{% extends 'admin_templates/add_category.html' %}
+
+{% block title %}product list{% endblock %}
+{% block section %}
+  
+
+
+<h1 style="font-size: 40px; margin-left: 30px;" class="p-2">
+    Update Product
+ </h1>
+
+ <div class="container m-5">
+     <form action="" method="post" enctype="multipart/form-data">
+
+         {% csrf_token %}
+         {{ form.as_p }}
+         <input type="submit" name="Submit">
+
+     </form>
+ </div>
+{% endblock %}

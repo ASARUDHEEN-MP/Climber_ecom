@@ -1,0 +1,26 @@
+{% extends 'index.html'%}
+{% block title %}
+collections
+{% endblock %}
+{% block section %}
+<h1>{% for item in categorys %}</h1>
+<div class="container">
+<div class="row">
+<div class="card" style="width: 18rem;">
+  
+    
+           <div class="box">
+    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      
+      <p class="card-text">{{item.description}}</p>
+      <a href="{% url 'collection_view' item.slug %}" class="btn btn-primary">{{item.category_name}}</a>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+{% endfor %}
+
+{% endblock %}

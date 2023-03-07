@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <link rel="shortcut icon" href="{% static 'images\logo1.png' %}" type="">
+      <!-- site metas -->
+      <title>{% block title %}Home{% endblock%}</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+      <!-- bootstrap css -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+      <!-- Default theme -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>     
+     <link rel="stylesheet" type="text/css" href="{% static 'css/zoom.css'%}">
+
+    </head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+      
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'cart' %}"><img src="{% static 'images/trolly1.png'%}"></a>
+              </li>
+            </ul>
+            <!-- Left links -->
+          </div>
+          <!-- Collapsible wrapper -->
+      
+         
+            <!-- Avatar -->
+            <div class="dropdown">
+              <a
+                class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                href="{% url 'userdetails' %}"
+                id="navbarDropdownMenuAvatar"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                  class="rounded-circle"
+                  height="25"
+                  alt="Black and White Portrait of a Man"
+                  loading="lazy"
+                />
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdownMenuAvatar"
+              >
+                <li>
+                  <a class="dropdown-item" href="#">My profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+    <div class="py-3 bg-primary">
+        <div class="container">
+            <a class='text-white' href="{% url 'index' %}">Home/</a>
+            <a class='text-white' href="collections">collection/</a>
+            
+           
+        </div>
+    </div>
+   
+    
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3 shadow  zoom-image product_data">
+                    <img class="card-img img-fluid" src="{{product.image.url}}" alt="" id="main-image">
+                </div>
+                <div class="row">
+                    <!--Start Controls-->
+                    <div class="col-1 align-self-center">
+                        
+                    </div>
+                    <!--End Controls-->
+                    <!--Start Carousel Wrapper-->
+                    <div id="multi-item-example" class="col-10 carousel slide carousel-multi-item" data-bs-ride="carousel">
+                        <!--Start Slides-->
+                        <div class="carousel-inner product-links-wap" role="listbox">
+
+                            <!--First slide-->
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <a href="#">
+                                            <img class="card-img img-fluid" src="{{product.image3.url}}" alt="" onclick="change_image(this)">
+                                        </a>
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="#">
+                                            <img class="card-img img-fluid" src="{{product.image.url}}" alt="" onclick="change_image(this)">
+                                        </a>
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="#">
+                                            <img class="card-img img-fluid" src="{{product.image1.url}}" alt="" onclick="change_image(this)">
+                                        </a>
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="#">
+                                            
+                                            <img class="card-img img-fluid" src="{{product.image2.url}}" alt="" onclick="change_image(this)">
+                                        </a>
+                                        
+                                    </div>
+                                   
+                                </div>
+                                
+                            </div>
+                 
+                        </div>
+                        <!--End Slides-->
+                    </div>
+                    <!--End Carousel Wrapper-->
+                    <!--Start Controls-->
+                    <div class="col-1 align-self-center">
+                        <a href="#multi-item-example" role="button" data-bs-slide="next">
+                    
+                            
+                        </a>
+                    </div>
+                    <!--End Controls-->
+                </div>
+            </div>
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card shadow product_data">
+                    <div class="card-body">
+                        <h1 class="h2">{{product.name}}</h1>
+                        <p class="h3 py-2"></p>
+                        <ul class="list-inline">
+                           
+                           
+                        </ul>
+                        
+                       
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h4>Category:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>{{product.category}}</strong></p>
+                            </li>
+                        </ul>
+                        <ul class="list-inline">
+                           
+                            <li class="list-inline-item">
+                                <h4 class="price_text">Price <span style=" color: #f7c17b">$</span> <span style=" color: #325662">{{ product.price| stringformat:'d' }}</span></h4>
+                            </li>
+                        </ul>
+                        <ul class="list-inline">
+                           
+                            <li class="list-inline-item">
+                                <h4>Description</h4> <span style=" color: #f7c17b"></span> <span style=" color: #325662">{{product.description}}</span>
+                           
+                        </ul>
+                        {% if product.quantity > 0 %}
+                          <label class="badge- bg-success">IN STOCK</label>
+                        {% else %}
+                          <label class="badge- bg-success">OUT OF STOCK</label>
+                        {% endif %}
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{product.id}}" class="prod_id">
+                                <label for="'Quantity">Quantity</label>
+                                <div class="input-group text-center mb-3" style="width:130px;">
+                                    <button class="input-group-text decrement-btn">-</button>
+                                    <input type="text" name="quantity" class="form-control qty-input text-center" value="1">
+                                    <button class="input-group-text increment-btn">+</button>
+                                </div>
+                            </div>
+                          
+                            <div class="row pb-3">
+                                <div class="col md-9">
+                                   {% if product.quantity > 0 %}
+                                    <button type="button"  class="btn btn-primary me-3 float-start addToCartBtn">ADD TO CART<i class="fa fa-shopping-cart"></i></button>
+                                    {% endif %}
+                                    </div>
+                                    <div class="col d-grid">
+                                        <button type="button"  class="btn btn-success me-3 float-start" >ADD TO WISHLIST<i class="fa fa-heart"></i></button>
+                                        
+                                    </div>
+                                </div>
+
+
+                        </div>
+                    
+
+                       
+                       
+                     
+                      
+                            
+                      
+                 
+                      
+                       
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ <script src="{% static 'js/jquery-3.6.3.min.js'%}"></script>
+      <script src="{% static 'js/customs.js'%}"></script>
+      <!-- Javascript files-->
+      <script src="{% static 'js/jquery.min.js'%}"></script>
+      <script src="{% static 'js/popper.min.js'%}"></script>
+      <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
+      
+      <script src="{% static 'js/plugin.js'%}"></script>
+      <!-- sidebar -->
+      <script src="{% static 'js/slider.js'%}"></script>
+      <script src="{% static 'js/custom.js'%}"></script>
+      <!-- javascript --> 
+      <script src="{% static 'js/owl.carousel.js'%}"></script> 
+     <!--ALETIFY JS-->
+     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+     <script> 
+        alertify.set('notifier','position', 'top-right');
+        {% for msg in messages %}
+           alertify.success('{{msg}}');
+        {% endfor %}
+     </script>
+     <script>
+        function change_image(image){
+          document.getElementById("main-image").src = image.src;
+        }
+          document.addEventListener("DOMContentLoaded", function(event) {
+            });
+                jQuery(document).ready(function ($) {
+                  $('.zoom-image img').click(function (event) {
+                    var ix = $(this).offset().left;
+                    var iy = $(this).offset().top;
+                    console.log(ix + '-' + iy);
+                    var mx = event.pageX;
+                    var my = event.pageY;
+                    console.log(mx + '-' + my);
+                  })
+                  $('.zoom-image img').hover(function () {
+                    var img = $(this).attr('src');
+                  $(this).after("<div class='hover-image' style='background-image: url(" + img + "); background-size: 300px;'></div>");
+                  $(this).mousemove(function (event) {
+                  // Mouse Position
+                    var mx = event.pageX;
+                    var my = event.pageY;
+                  // Image Position
+                    var ix = $(this).offset().left;
+                    var iy = $(this).offset().top;
+                  // Mouse Position Relavtive to Image
+                    var x = mx - (ix);
+                    var y = my - (iy);
+                  // Image Height and Width
+                    var w = $(this).width();
+                    var h = $(this).height();
+                  // Mouse Position Relative to Image, in %
+                    var xp = (-x / w) * -100;
+                    var yp = (-y / h) * -100;
+                  $(this).parent().find('.hover-image').attr('style',
+                    "background-image: url(" + img + "); background-size: 1000px; background-repeat: no-repeat; background-position: " + xp + "% " + yp + "%; top: " + y + "px; left: " + x + "px;");
+                });
+              }, function () {
+            $(this).parent().find('.hover-image').remove();
+          });
+        });
+        
+        </script>
+    </body>
+    </html>
+
+
+

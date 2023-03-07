@@ -1,0 +1,86 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+ canceled order
+{% endblock %}
+{% block body %}
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">cancelde order</h4>
+          </div>
+          <a href="{% url 'orders' %}" class="btn btn-warning float-end text-white"><i class="fa fa-reply"> </i>Back</a>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    No
+                  </th>
+                  <th>
+                    Name
+                  </th>
+                  <th>
+                    Address
+                  </th>
+                  
+                  <th class="text-right">
+                    Status
+                  </th>
+                  <th class="text-right">
+                    Payment_mode
+                  </th>
+                  <th>
+                    Tracking no
+                  </th>
+                 
+                  
+                </thead>
+                <tbody>
+                {% for item in ord%}
+                <tr>
+                  <td>
+                    {{forloop.counter}}
+                   </td>
+                  <td>
+                   {{item.user}}
+                  </td>
+                  <td>
+                         {{item.address.address}}
+                  </td>
+                  <td>
+                    {{item.status}}
+                   </td>
+                   <td>
+                    {{item.payment_mode}}
+                   </td>
+                   <td>
+                    {{item.tracking_no}}
+                   </td>
+             
+                  
+             
+                  <td class="text-right">
+                    
+                </td>   
+               
+                
+                  {% comment %} <td><a href="ordstatus/{{item.id}}"><button class="btn btn-primary">Update</button></button></a> </td>
+                  <td><a href="canclorder/{{item.id}}"><button class="btn btn-danger">Cancel the order</button></button></a> </td>
+                  <td><a href="{% url 'vieworders' item.tracking_no %}" class="btn btn-primary">View</a></td>
+                  <td><a href="deleteord/{{item.id}}"><button class="btn btn-danger">Delete</button></button></a> </td> {% endcomment %}
+                    
+              </tr>
+              {% endfor %}
+              <tr>
+              
+             
+               
+              </tbody>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

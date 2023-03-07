@@ -1,0 +1,60 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+category
+{% endblock %}
+{% block body %}
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">categorylist</h4>
+          </div>
+          <td class=""><a href="{% url 'add_category'%}"><button class="btn btn-primary">ADD</button></a> </td>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    NO
+                  </th>
+                  <th>
+                    category
+                  </th>
+                  <th>
+                    description
+                  </th>
+                  
+                  <th class="text-right">
+                    image
+                  </th>
+                  
+                </thead>
+                <tbody>
+                    {% for obj in category %}
+                  <tr>
+                    <td>
+                        {{forloop.counter}}
+                    </td>
+                    <td>
+                        {{obj.category_name}}
+                    </td>
+                    <td>
+                        {{obj.description}}
+                    </td>
+                    
+                    <td><img src="{{obj.image.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
+                     
+                    <td><a href="updatecatgory/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                      <td><a href="deletes/{{obj.id}}"><button class="btn btn-danger">delete</button></button></a> </td>
+                </tr>
+                  {% endfor %}
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+                  
+{% endblock %}

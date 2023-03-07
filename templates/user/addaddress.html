@@ -1,0 +1,108 @@
+{% extends 'localbase.html'%}
+
+{% block title %}cart{% endblock %}
+{% block body %}
+
+<div class="col-xl-8 mx-auto">
+    <!-- Account details card-->
+
+<hr class="mt-0 mb-4">
+  <div class="card mb-4">
+        <div class="card-header">Address Details
+            <a href="{% url 'userdetails' %}" class="btn btn-warning float-end text-white"><i class="fa fa-reply"> </i>Back</a>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {%csrf_token%}
+                
+                {% comment %} <label class="small mb-1" >HOME / OFFICE</label> {% endcomment %}
+                {% comment %} <select class="mb-3" name="delivery_point" id="category" >
+                           
+                            <option>HOME</option>
+                            <option>OFFICE</option>
+                           
+                        </select> {% endcomment %}
+                <!-- Form Group (username)-->
+                <div class="mb-3">
+                    <label class="small mb-1 float-left">First Name</label>
+                    <input class="form-control" id="inputUsername" type="text"  name="fname" placeholder="Enter your First Name" >
+            
+                
+                </div>
+                <div class="mb-3">
+                    <label class="small mb-1 float-left">Last Name</label>
+                    <input class="form-control" id="inputUsername" type="text"  name="lname" placeholder="Enter your Last Name" >
+                </div>
+                <!-- Form Row-->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (first name)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left"  >Mobile</label>
+                        <input class="form-control"  name="phone" id="inputFirstName" type="text" placeholder="Enter your mobile number" >
+                        <div>
+                            <div class="error">
+                                
+                              {% for messag in messages %}
+                                  <h6 style="color: red;">{{messag}}</h6>
+                              {%endfor%}
+                            </div>
+                    </div>
+                </div>
+                    <!-- Form Group (last name)-->
+                    <div class="col-md-6">
+                        
+                </div>
+                <!-- Form Row        -->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (organization name)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Address</label>
+                        <input  class="form-control" id="inputOrgName"  name="address" type="text" placeholder="Enter your house  name" >
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >State</label>
+                        <input  class="form-control" name="state" id="inputLastName" type="text" placeholder="Enter your state">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Email</label>
+                        <input  class="form-control" id="inputOrgName"  name="email" type="text" placeholder="Enter your number  name" >
+                    </div>
+                    <!-- Form Group (location)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >City</label>
+                        <input  class="form-control" id="inputLocation"name="city" type="text" placeholder="Enter your city" >
+                    </div>
+                </div>
+                <!-- Form Group (email address)-->
+               
+                <!-- Form Row-->
+                <div class="row gx-3 mb-3">
+                    <!-- Form Group (phone number)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left" >Country</label>
+                        <input  class="form-control" name="country" id="inputPhone" type="tel" placeholder="Enter your country" >
+                    </div>
+                    <!-- Form Group (birthday)-->
+                    <div class="col-md-6">
+                        <label class="small mb-1 float-left">pincode</label>
+                        <input required class="form-control" id="inputBirthday" type="text" name="pincode" placeholder="Enter your pincode" >
+                    </div>
+                </div>
+                 <!-- Save changes button-->
+                 
+        
+
+        </div>
+        <button class="btn btn-primary validate btn-lg float-right" value="submit" type="submit">Add Address</button>
+      
+      
+        </form></center>  
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{%endblock scripts %}
+

@@ -1,0 +1,72 @@
+{% extends 'admin_home.html'%}
+{% block title %}
+USER
+{% endblock %}
+{% block body %}
+<div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">search</span>
+    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+  </div>
+</div>
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title"> User List</h4>
+          </div>
+      
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    NO
+                  </th>
+                  <th>
+                    username
+                  </th>
+                  <th>
+                    emil
+                  </th>
+                  
+                  <th class="text-right">
+                    active
+                  </th>
+               
+                  
+                </thead>
+                <tbody>
+                    {% for obj in users %}
+                  <tr>
+                    <td>
+                      {{forloop.counter}}
+                    </td>
+                    <td>
+                        {{obj.username}}
+                    </td>
+                    <td>
+                        {{obj.email}}
+                    </td>
+                  
+                    <td class="text-right">
+                        {{obj.is_active}}
+                    </td>
+                   
+                  
+                  <td><a href="blockuser/{{obj.pk}}"><button class="btn btn-primary">BLOCK</button></a> </td>
+                  <td><a href="unblockuser/{{obj.id}}"><button class="btn btn-primary">UNBLOCK</button></a> </td>
+                  <td><a href="delete/{{obj.id}}"><button class="btn btn-danger">delete</button></button></a> </td>
+                  
+                </tr>
+                  {% endfor %}
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+                  
+{% endblock %}

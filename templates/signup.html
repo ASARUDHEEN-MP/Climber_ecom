@@ -1,0 +1,143 @@
+
+{% extends "basepass.html"%}
+{% block title %}Climber | Register{% endblock%}
+{% block start %}
+<div class="wrapper fadeInDown">
+<div class="continer">
+    <form method="post" class="form" id="form">
+        {% csrf_token %}
+        <h1>Regsiter</h1>
+        {% if messages %}
+
+        {% for message in messages %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post">
+          {%csrf_token%}
+          <div class="input-group form-group">
+              <div class="input-group-prepend">
+                <label for="email">username</label>
+          <input type="text" id="username" name="username" id="name" class="form-control" placeholder="Username" required data-error="Please enter your name">
+          <div class="form-group">
+            <label for="email">email</label>
+          <input type="text"  name="email" id="email" class="form-control" placeholder="email" required data-error="Please enter your message subject">
+          </div>
+          {% comment %} {% for messag in messages %}
+                  <h6>{{messag}}</h6>
+              {%endfor%}  {% endcomment %}
+              <label for="phonenumber">phonenumber</label>
+          <input type="text" id="phonenumber" name="phonenumber" id="phonenumber" class="form-control" placeholder="phonenumber" required data-error="Please enter your name">
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" id="password" class="form-control" placeholder="password" required data-error="Please enter your name">
+           
+        </div>
+         
+            <button class="btn btn-success mt-3"  value="Log In" id="submit" type="submit">Submit</button>
+          
+          
+        </form>
+    
+
+     
+        
+
+    </form>
+      <div class="text-center mt-3">
+      <a class="underlineHover" href="{% url 'login' %}">Login</a>
+      <div>
+    
+</div>
+<div>
+
+{% endblock %}
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'images\logo1.png' %}" type="">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/loginn.css'%}" />
+
+<!------ Include the above in your HEAD tag ---------->
+    <title>climber | login</title>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+      
+          <!-- Icon -->
+          <div class="fadeIn first">
+            <h3>climber</h3>
+            <img width="90" src="{% static 'images\logo1.png' %}" id="icon" alt="User Icon" />
+            
+          </div>
+          <form method="post">
+            {%csrf_token%}
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+            <input type="text" id="username" name="username" id="name" class="form-control" placeholder="Username" required data-error="Please enter your name">
+            <input type="text"  name="email" id="email" class="form-control" placeholder="email" required data-error="Please enter your message subject">
+            {% for messag in messages %}
+                    <h6>{{messag}}</h6>
+                {%endfor%} 
+            <input type="text" id="phonenumber" name="phonenumber" id="phonenumber" class="form-control" placeholder="phonenumber" required data-error="Please enter your name">
+            <input type="text" id="password" name="password" id="password" class="form-control" placeholder="password" required data-error="Please enter your name">
+            
+            <div class="form-group">
+              <div style="color: red;">
+                  
+                {% for messag in messages %}
+                    <h6>{{messag}}</h6>
+                {%endfor%} 
+              </div>
+            
+            <input type="submit"  id="submit" class="login-btn" value="Log In">
+          </form>
+          
+           
+            
+      
+
+
+          <div id="formFooter">
+            <a class="underlineHover" href="{% url 'login' %}">Login</a>
+          </div>
+      
+        </div>
+      </div>
+</body>
+
+
+
+
+
+</html> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,276 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cart Item View</title>
+  
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrapss.min.css'%}">
+    <!-- style css -->
+
+    
+    
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css'%}">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="{% static 'https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'%}"> 
+    <!-- owl stylesheets --> 
+    {% comment %} <link href="{% static 'https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700,800&display=swap'%}" rel="stylesheet">  {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/min.carousel.css'%}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
+    <link rel="stylesheet" href="{% static 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css'%}" media="screen">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    <!--ALETIFY JS-->
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+     <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/checkout.css'%}">
+ 
+      <!-- style css -->
+     
+      
+      
+     
+      
+
+
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		#pay {
+			background-color: white;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			max-width: 600px;
+			margin: 0 auto;
+            margin-top: 200px;
+		}
+		
+		
+		
+        h2{
+            color: #45a049;
+            /* padding: 50px;
+            border-radius: 10px;
+			
+			margin: 0 auto; */
+
+        }
+        
+	</style>
+</head>
+<body>
+   <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Navbar brand -->
+      
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'cart' %}"><img src="{% static 'images/trolly1.png'%}"></a>
+        </li>
+      </ul>
+      <!-- Left links -->
+    </div>
+    <!-- Collapsible wrapper -->
+
+   
+      <!-- Avatar -->
+      <div class="dropdown">
+        <a
+          class="dropdown-toggle d-flex align-items-center hidden-arrow"
+          href="{% url 'userdetails' %}"
+          id="navbarDropdownMenuAvatar"
+          role="button"
+          data-mdb-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+            class="rounded-circle"
+            height="25"
+            alt="Black and White Portrait of a Man"
+            loading="lazy"
+          />
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdownMenuAvatar"
+        >
+          <li>
+            <a class="dropdown-item" href="#">My profile</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Settings</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Right elements -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
+          
+    
+	
+
+    
+
+  
+<div class="py-3 bg-primary">
+    <div class="container">
+        <a class='text-white' href="{% url 'index' %}">Home/</a>
+        <a class='text-white' href="{% url 'cart' %}">cart</a>
+    </div>
+</div>
+{{users.username}}
+
+<div class="py-5 mt-5 ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <div class="card shadow ">
+                    {% for item in cart_items %}
+                    <div class="card-body">
+                        
+                       
+                        <div class="row product_data">
+                            <div class="col-md-2 my-auto">
+                                
+                                <img src="{{ item.product.image.url }}"height="70px" width="70px">
+                            </div>
+                            <div class="col-md-2 my-auto">
+                                <h5>{{item.product.name }}</h5>
+                            </div>
+                            
+                            <div class="col-md-2 my-auto">
+                            <input type="hidden" value="{{item.product.id}}" class="prod_id">
+                            {% csrf_token %}
+                           
+                              
+                              <div class="input-group text-center mb-3" style="width:130px;">
+                                  <button class="input-group-text changeqty decrement-btn">-</button>
+                                  <input type="text" name="quantity" class="form-control qty-input text-center" value="{{item.product_qty}}">
+                                  <button class="input-group-text changeqty increment-btn">+</button>
+                               </div>
+                           
+                        </div>
+                        <div class="col-md-2 my-auto">
+                            
+                            
+                        <div class="col-md-2 my-auto">
+                            <a href="delete_cart/{{item.id}}"><button class="btn btn-outline-danger">delete</button></button></a> 
+                            </div>
+                        </div>
+      
+                             
+                          {% endfor %}
+                          
+                          {% if total  %}
+                          <div class="col-md-4">
+                            <div class="card mb-4">
+                              <div class="card-header py-3">
+                               
+                                <a href="{% url "checkout" %}">
+                                <button type="button" class="btn btn-primary btn-lg btn-block">
+                                    Go to checkout
+                                  </button>
+                                </a> 
+                                {% else %}
+                                     <p>Your cart is empty.</p>
+                                {% endif %}
+                                
+                    </div>
+                    </div>
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+
+<script src="{% static 'js/jquery-3.6.3.min.js'%}"></script>
+<script src="{% static 'js/customs.js'%}"></script>
+
+<!-- Javascript files-->
+
+
+<!--search bar-->
+
+
+
+
+
+<!--ALETIFY JS-->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script> 
+  alertify.set('notifier','position', 'top-right');
+  {% for msg in messages %}
+     alertify.success('{{msg}}');
+  {% endfor %}
+</script>
+<script>
+   function openNav() {
+     document.getElementById("mySidenav").style.width = "250px";
+     document.getElementById("main").style.marginLeft = "250px";
+   }
+  
+   function closeNav() {
+     document.getElementById("mySidenav").style.width = "0";
+     document.getElementById("main").style.marginLeft= "0";
+    
+   }
+
+   $("#main").click(function(){
+       $("#navbarSupportedContent").toggleClass("nav-normal")
+   })
+</script>
+
+
+
+   
+</body>
+</html>
+  

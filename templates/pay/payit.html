@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Payment Processing Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		#pay {
+			background-color: white;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			max-width: 600px;
+			margin: 0 auto;
+            margin-top: 200px;
+		}
+		
+		
+		
+        h2{
+            color: #45a049;
+            /* padding: 50px;
+            border-radius: 10px;
+			
+			margin: 0 auto; */
+
+        }
+	</style>
+</head>
+<body>
+   
+        
+            
+          
+      
+	<div class="mt-5" id="pay">
+        <h3 class="text-center">hy! {{name}}</h3><br>
+            <h4 class="text-center">Total Price</h4>
+            <hr>
+            <h3 class="text-center">{{total}}</h3>
+            <hr>
+        <div class="text-center">
+            <h2>Proceed To pay</h2>
+        </div>
+        <div class="ml-2 text-center">
+            <button class="btn btn-primary w-100 mt-4 mb-4 " id="rzp-button1">CONFORM</button>
+        </div>
+        
+           
+    
+        <!-- <button id="rzp-button1">Pay</button> -->
+        
+		
+	</div>
+   
+</body>
+</html>
+
+
+
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "rzp_test_Q76eqQekpYrXb6", // Enter the Key ID generated from the Dashboard
+    "amount":{{total}}, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp", 
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "{{id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+     "callback_url": "http://127.0.0.1:8000/verification_payment",
+    // "handler": function (response){
+    //  ]
+    //     alert(response.razorpay_payment_id);
+    //     alert(response.razorpay_order_id);
+    //     alert(response.razorpay_signature)
+    // },
+    "prefill": {
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    console.log("asd");
+    rzp1.open();
+    e.preventDefault();
+}
+</script>

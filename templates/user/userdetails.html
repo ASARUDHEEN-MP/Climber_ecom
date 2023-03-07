@@ -1,0 +1,105 @@
+{% extends 'localbase.html'%}
+
+{% block title %}cart{% endblock %}
+{% block body %}
+
+<div>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+       <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Profile Picture</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                    <p>{{users.username}}</p>
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div> 
+                    <!-- Profile picture upload button-->
+                   <button class="btn btn-primary" type="button">Upload new image</button>
+                </div>
+            </div>
+        </div>
+       
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <form method="post" action="/userprofile">
+                        
+                      
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName" > Username</label>
+                                <h1>{{users.username}}</h1>
+                            </div>
+                            <label class="small mb-1" for="inputEmailAddress">Email</label>
+                            <p >{{users.email}}</p>
+                         
+                 
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                           
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                           
+                            <!-- Form Group (birthday)-->
+                           <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday"></label>
+                               
+                            </div>
+                        </div>
+                        <!-- Save changes button-->
+                        
+                 
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header"> Address</div>
+               
+                <div class="card-body">
+                 <div class="row">
+                      <div class="col-md-6">
+                        {% for item in address%}
+                           <div class="bg-white card addresses-item mb-4 border border-primary shadow">
+                                
+                                <div class="gold-members p-4">
+                                    <div class="media">
+                                        <div class="mr-3"><i class="icofont-ui-home icofont-3x"></i>
+                                        </div>
+                                        <div class="media-body">
+                                          <h6>Name:</h6> <hr><p>{{item.fname}}</p>
+                                          <hr>
+                                          <h6>Address</h6>
+                                            <p>{{item.address}}</p>
+                                           <h6>phonenumber</h6><p>{{item.phone}}</p>
+                                            <a class="btn btn-danger"href="deleteaddress/{{item.pk}}">DELETE</a>
+                                             <a class="btn btn-primary" href="editaddress/{{item.pk}}">EDIT</a> 
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            {% endfor%}
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+</div>
+{% endblock %}

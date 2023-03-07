@@ -1,0 +1,46 @@
+{% extends 'localbase.html'%}
+
+{% block body %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">MY ORDERS</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>order details<th>
+                                <th>Tracking_no<th>
+                              
+                                <th>total price<th>
+                                <th>status<th>
+                                <th>payment method<th>
+                                
+                                </tr> 
+                            </thead>   
+                                        <tbody>
+                                            {% for items in oderz %}
+                                            <tr>
+                                            <th>{{items.created_at.date}}<th>
+                                                <th>{{items.tracking_no}}<th>
+                                                  
+                                                    <th>{{items.total_price}}<th>
+                                                        <th>{{items.status}}<th>
+                                                        <th>{{items.payment_mode}}<th>
+                                                           <a href="{% url 'vieworder' items.tracking_no %}" class="btn btn-primary">View</a>
+                                                           <a href="cancelorders/{{items.pk}}" class="btn btn-danger">cancel the order</a>
+                                                            <tr>
+                                                {% endfor %}
+
+                                        </tbody>   
+                                    </table>
+                                </div>    
+                            </div>    
+                        </div>    
+                    </div>    
+                    
+
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends 'user/mainlocal.html'%}
+
+            {% block title %}CHECKOUT{% endblock %}
+            {% block body %}
+            <!DOCTYPE html>
+            <html>
+            <head>
+            </head>
+            <body>
+                
+            <div class="py-3 bg-primary">
+                <div class="container">
+                    <a class='text-white' href="{% url 'index' %}">Home/</a>
+                    <a class='text-white' href="cart">cart/</a>
+                    <a class='text-white' href="checkout">checkout/</a>
+                    
+                   
+                </div>
+            </div>
+            
+           
+                    <!--End Page Title-->
+                  <div class="container">
+                        <div class="row ">
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="your-order-payment">
+                                    <div class="your-order">
+                                        <h2 class="order-title mb-4">Your Order</h2>
+            
+                                        <div class="table-responsive-sm order-table table-bordered">
+                                            <table class="table">
+                                                <thead>
+                                                    {% if cartitems %}
+                                                    <tr>
+                                                        <th scope="col">image</th>
+                                                        <th scope="col">Product Name</th>
+                                                        <th scope="col">Quantiy</th>
+                                                        <th scope="col">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in cartitems %}
+                                                    <tr>
+                                                        <td>
+                                                            <img src="{{item.product.image.url}}" height="50px" class="me-5" width="50px">
+                                                            
+                                                        </td>
+                                                        <th scope="row">{{ item.product.name}}</th>
+                                                        <td>{{ item.product_qty}}</td>
+                                                        <td>{{ item.product.price| stringformat:'d'}}</td>
+                                                        <input type="hidden" name="productid" value="this._id">
+                                                    </tr>
+                                                   
+                                                </tbody>
+                                                {% endfor %}
+                                                <tfoot>
+                                                    <tr>
+                                                        
+                                                        <td>Grand Total</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{grand_total| stringformat:'d'}}</td>
+                                                    </tr>
+                                                </tfoot>
+                                                <tfoot>
+                                                    <tr>
+                                                        
+                                                        <td>total</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{m| stringformat:'d'}}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            
+                                                <tfoot>
+                                                    <tr>
+                                                        
+                                                        <td>Discount</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{discount| stringformat:'d'}}</td>
+                                                    </tr>
+                                                </tfoot>
+                                                <tfoot>
+                                             
+                                                </tfoot>
+                                                {% endif %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="your-payment ">
+                                        <h3 class="payment-title mb-3 mt-4">Coupon</h3>
+                                        <hr>
+                                     
+                                         <!--coupon-->
+                                    
+                                                <p class=" text-success";>Available Coupon</p>
+                                            <div class="input-group mt-3">
+                                                {% for item in coupen %}
+                                                <input  class="form-control rounded " placeholder="{{item.coupon_code}}" />
+                                                {% endfor %}
+                                              </div>
+                                              <div style="color: rgb(103, 236, 14);">
+                        
+                                              
+                                              </div>
+                                          
+                                            <form method="post" action="{% url 'applycoupon' %}">
+                                                {%csrf_token%}
+                                            <div class="card mb-4">
+                                                <div class="card-body p-1 d-flex flex-row">
+                                                  <div class="form-outline flex-fill">
+                                                    <input type="text" id="form1" class="form-control form-control-lg" placeholder="Discound code"  name="coupon" aria-label="Search" aria-describedby="search-addon"  />
+                                                    
+                                                    {% for messag in messages %}
+                                                        <h6 style="color: red;">{{messag}}</h6>
+                                                    {%endfor%}
+                                                  </div>
+                                                  <button type="submit" class="btn btn-outline-warning btn-lg ms-2">Apply</button>
+                                                </div>
+                                              </div>
+                                            </form>
+
+                                        <div class="payment-method">
+
+                                            <hr>
+                                            <!--coupon-->
+                                            {% comment %} <form method="post" action="{% url 'applycoupon' %}">
+                                                {%csrf_token%}
+                                            <div class="input-group mt-3">
+                                                <input type="search" class="form-control rounded" placeholder="Enter coupon number" name="coupon" aria-label="Search" aria-describedby="search-addon" />
+                                                <button type="submit" class="btn btn-outline-primary">Apply</button>
+                                              </div>
+                                              <div style="color: rgb(103, 236, 14);">
+                        
+                                                {% for messag in messages %}
+                                                    <h6>{{messag}}</h6>
+                                                {%endfor%}
+                                              </div>
+                                            </form> {% endcomment %}
+                                               <!--coupon-->
+                                            <form method="POST" action="payit">
+                                                {%csrf_token%}
+                                              
+                                                <h2 class="payment-title mb-3">Payment Method</h2>
+                                                 <input type='hidden' value='Razorpay' name='payment_mode'>
+                                                   <div class=" mt-3">
+                                                    <input hidden type="text" name="total" value="{{grand_total| stringformat:'d'}}">
+                                                    {%for item in addrssz %}
+                                                    <input hidden type="text" name="name" value="{{item.fname}}">
+                                                    <input hidden type="text" name="phone" value="{{item.phone}}">
+                                                    {% endfor %}
+                                                   
+                                              
+                                            
+                                            <button class="btn btn-primary w-100 mt-4 mb-4">online pay|Place Order</button>
+                                            </div>
+                                        </form> 
+                                        <form method="POST" action="placeorder">
+                                            {%csrf_token%}
+                                            <input type='hidden' value='cod' name='cod'>
+                                            <button class="btn btn-success w-100 mt-4 mb-4">cod|Place Order</button>
+                                        </form> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom">
+                                <div class="create-ac-content bg-light-gray padding-20px-all">
+                                    <br><br>
+                                    <h2>Deliver to:</h2>
+                                    <hr>
+                                    
+                                    <div class="row">
+                                    {% for adress in address %}
+                                <ul class="list-group mb-3"></ul>
+                                <li class="list-group-item d-flex justify-content-between lh-sm">
+                                   
+                                    <div class="form-check">
+                                        <!-- <input type="checkbox" class="form-check-input" name="" id="same-address">
+                                        <label class="form-check-label" for="same-address"> -->
+                                            
+                                       <h5>NAME : {{adress.fname}}{{adress.lname}}<h5>
+                                        <h5>Address :{{adress.email}} </h5>
+                                        <h5>PhoneNumber :{{adress.phone}}</h5>
+                                         {{adress.address}} <br>
+                                         {{adress.city}},<br>
+                                         {{adress.state}}  <br>
+                                         {{adress.country}}  <br>
+                                         {{adress.pincode}}  <br>
+            
+                                        <!-- </label> -->
+                                        
+                                       <a href="{% url "default" adress.id%}">
+                                        <button class="btn p-1 bg-primary mt-3 text-white" id="confirmOrderButton" 
+                                        value="Place order" onclick="placeOrder()" type="submit" value="{{address.id}}">
+                                        Select</button> </a>
+                                       
+                                    </div>
+                                </div>
+                              
+                                </li>
+                            </ul>
+                                {% endfor %}
+                                        
+                                 
+                      
+    
+                                        <input type="hidden" name="selectedAddress">
+                                        
+                                        
+                                    </div>
+                                </div>
+                             </div> 
+                            </div>
+                           
+                      
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            {% endblock %}  
+            {% block scripts %}
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script>
+                
+            </script>
+        </body>
+        </html>
+            {%endblock scripts %}
+          
+        
