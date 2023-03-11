@@ -1,6 +1,6 @@
 {% extends 'user/mainlocal.html'%}
 
-            {% block title %}CHECKOUT{% endblock %}
+            {% block title %}CHECKOUT {% endblock %}
             {% block body %}
             <!DOCTYPE html>
             <html>
@@ -12,7 +12,7 @@
                 <div class="container">
                     <a class='text-white' href="{% url 'index' %}">Home/</a>
                     <a class='text-white' href="cart">cart/</a>
-                    <a class='text-white' href="checkout">checkout/</a>
+                    <a class='text-white' href="checkout">checkouts/</a>
                     
                    
                 </div>
@@ -49,6 +49,7 @@
                                                         </td>
                                                         <th scope="row">{{ item.product.name}}</th>
                                                         <td>{{ item.product_qty}}</td>
+                                                        
                                                         <td>{{ item.product.price| stringformat:'d'}}</td>
                                                         <input type="hidden" name="productid" value="this._id">
                                                     </tr>
@@ -127,21 +128,7 @@
                                         <div class="payment-method">
 
                                             <hr>
-                                            <!--coupon-->
-                                            {% comment %} <form method="post" action="{% url 'applycoupon' %}">
-                                                {%csrf_token%}
-                                            <div class="input-group mt-3">
-                                                <input type="search" class="form-control rounded" placeholder="Enter coupon number" name="coupon" aria-label="Search" aria-describedby="search-addon" />
-                                                <button type="submit" class="btn btn-outline-primary">Apply</button>
-                                              </div>
-                                              <div style="color: rgb(103, 236, 14);">
-                        
-                                                {% for messag in messages %}
-                                                    <h6>{{messag}}</h6>
-                                                {%endfor%}
-                                              </div>
-                                            </form> {% endcomment %}
-                                               <!--coupon-->
+                                           
                                             <form method="POST" action="payit">
                                                 {%csrf_token%}
                                               
@@ -154,27 +141,34 @@
                                                     <input hidden type="text" name="phone" value="{{item.phone}}">
                                                     {% endfor %}
                                                    
-                                              
+                                             
                                             
                                             <button class="btn btn-primary w-100 mt-4 mb-4">online pay|Place Order</button>
                                             </div>
                                         </form> 
-                                        <form method="POST" action="placeorder">
+                                        <form method="POST" action="cashondelivery">
                                             {%csrf_token%}
                                             <input type='hidden' value='cod' name='cod'>
                                             <button class="btn btn-success w-100 mt-4 mb-4">cod|Place Order</button>
+                                            
                                         </form> 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom">
                                 <div class="create-ac-content bg-light-gray padding-20px-all">
                                     <br><br>
                                     <h2>Deliver to:</h2>
                                     <hr>
-                                    
+                                    <a href="{% url 'placeaddaddress'%}">
+                                    <button type="button"  class="btn btn-primary me-3 float-start addToCartBtn">Add Address  <i class="fa fa-map-marker"></i></button>
+                                </a>
+                                {% if button  == 0%}
+                            <h4 class='text-danger'>Please Add Your Address</h4>
+                            {% endif %}
                                     <div class="row">
                                     {% for adress in address %}
                                 <ul class="list-group mb-3"></ul>
@@ -218,8 +212,8 @@
                              </div> 
                             </div>
                            
-                      
-
+                       
+                        
 
                         </div>
                     </div>

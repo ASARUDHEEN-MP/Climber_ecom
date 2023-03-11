@@ -35,6 +35,7 @@ class carts(models.Model):
     product = models.ForeignKey(product_list, on_delete=models.CASCADE)
     product_qty=models.IntegerField(null=False,blank=False)
     created_at=models.DateTimeField(auto_now_add=True)
+    total=models.FloatField(default=0)
     
     
 #userdetails
@@ -73,6 +74,7 @@ class order(models.Model):
     tracking_no=models.CharField(max_length=150,null=True)
     created_at=models.DateTimeField(auto_now=True)
     updated_at=models.DateTimeField(auto_now=True)
+    discountprice=models.FloatField(default=0)
 
     def __str__(self) -> str:
         return '{}-{}'.format(self.id,self.tracking_no)
@@ -83,6 +85,7 @@ class orderitem(models.Model):
     product =models.ForeignKey(product_list,on_delete=models.CASCADE)
     price=models.FloatField(null=False)
     quantity=models.IntegerField(null=False)
+    total=models.FloatField(default=0)
 
     def __str__(self) :
         return '{}-{}'.format(self.order.id,self.order.tracking_no)
@@ -104,7 +107,19 @@ class Used_Coupon(models.Model):
     coupon = models.ForeignKey(coupon,on_delete=models.CASCADE,null=True)
 
 
+class sucessamount(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    grandtotal=models.FloatField(default=0)
 
 
+class wishlist(models.Model):
+     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+     product = models.ForeignKey(product_list, on_delete=models.CASCADE)
+     created_at=models.DateTimeField(auto_now_add=True)
+     total=models.FloatField(default=0)
 
+class UserProfilepic(models.Model):
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    # add this field to store the profile picture
+    profile_picture = models.ImageField(upload_to='dp', blank=True, null=True)
 

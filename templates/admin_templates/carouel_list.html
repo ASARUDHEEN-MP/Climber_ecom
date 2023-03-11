@@ -1,4 +1,4 @@
-{% extends 'admin_home.html'%}
+ {% extends 'admin_home.html'%}
 {% block title %}
 category
 {% endblock %}
@@ -47,43 +47,11 @@ category
                 </td>
                   <td><img src="{{obj.image1.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
                    
-                  <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
+                  <td><a href="update_carousel/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
                     
               </tr>
-              <tr>
-                <td>
-                    {{obj.name}}
-                </td>
-                <td>
-                    {{obj.title}}
-                </td>
-                
-               
-                <td class="text-right">
-                  {{obj.description}}
-              </td>
-                <td><img src="{{obj.image2.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
-                 
-                <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
-                  
-            </tr>
-            <tr>
-              <td>
-                  {{obj.name}}
-              </td>
-              <td>
-                  {{obj.title}}
-              </td>
-              
              
-              <td class="text-right">
-                {{obj.description}}
-            </td>
-              <td><img src="{{obj.image3.url}}" class="img-fluid rounded-start" style="height: 50px; width: 50px;"  alt="..."></td>
-               
-              <td><a href="updateProduct/{{obj.pk}}"><button class="btn btn-primary">Edit</button></button></a> </td>
-                
-          </tr>
+            
                 {% endfor %}
                
               </tbody>
@@ -92,4 +60,4 @@ category
         </div>
       </div>
 
-{% endblock %}
+{% endblock %} 

@@ -1,0 +1,69 @@
+{% extends "basepass.html"%}
+{% block title %}Climber | Order{% endblock%}
+{% block start %}
+{% load static%}
+
+
+<div class="container h-100 w-100">
+
+    <div class="row h-100 w-100">
+        <div class="col-12 mx-auto d-table h-100 w-50">
+            <div class="d-table-cell align-middle">
+  
+                <div class="text-center mt-4">
+                   
+                    
+  
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-sm-4">
+  
+                            {% if messages %}
+
+                            {% for message in messages %}
+                            <div class="alert alert-info">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                                
+                            
+								
+                              
+                                <div class="form-group">
+                                    <h1 class="h2" style="color: rgb(5, 5, 6);">Conform Cash on delivery order</h1>
+									
+                                </div>
+                                <img src="{% static 'images/cashondelivery.jpeg'%}" alt="Success Icon" style="width:270px;">
+                                <div class="form-group">
+                                    <h6  style="color: rgb(5, 5, 6);">You can pay at the time of delivery via cash/upi or Atm card.</h6>
+									
+                                </div>
+                               
+                                <div class="text-center mt-3">
+                                    <a href="{% url 'placeorder'%}">
+                                    <button  class="btn btn-warning">
+                                      <span class="glyphicon glyphicon-share-alt"></span>
+                                      Confirm  Order
+                                    </button>
+                                </a>
+                                  </div> 
+								  
+                            
+                            
+							
+								  
+								 
+								
+								
+							  </div> 
+							
+                        </div>
+                    </div>
+                </div>
+  
+            </div>
+        </div>
+    </div>
+  </div>
+  {% endblock %}

@@ -37,12 +37,10 @@ class categoryForm(forms.ModelForm):
 class carosuelForm(forms.ModelForm):
     class Meta:
         model = carosuel
-        fields = ['name','image1', 'image2', 'image3','title','description']
+        fields = ['name','image1', 'title','description']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'image1': forms.FileInput(attrs={'class': 'form-control'}),
-            'image2': forms.FileInput(attrs={'class': 'form-control'}),
-            'image3': forms.FileInput(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             

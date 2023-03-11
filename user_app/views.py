@@ -22,6 +22,10 @@ from django.views import View
 import razorpay
 import smtplib
 import secrets
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger
+
+
 
 
 from.form import send_forget_password_mail
@@ -30,8 +34,8 @@ import uuid
 @cache_control(no_cache = True,must_revalidate = False,no_store = True)
 def index(request):
     categorys = Categorys.objects.filter(status=0)
-    
-    context={'categorys':categorys}
+    carosuelS=carosuel.objects.get()
+    context={'categorys':categorys,'carosuelS':carosuelS}
     return render(request,'user/index1.html',context)
 #----------------------------------------------------------login----------------------------------
 @cache_control(no_cache =True, must_revalidate =False, no_store =True)
@@ -135,7 +139,7 @@ def verify_login(request):
     if request.method =='POST':
        
         OTP =request.POST['otp']
-        print(OTP)
+        
     
         if OTP == otp:
            del request.session['otp'] 
@@ -229,18 +233,44 @@ def collections(request):
 
 #collections
 
-   
+
 def collection_view(request,slug):
    if(Categorys.objects.filter(slug=slug,status=0)):
       productt=product_list.objects.filter(category__slug=slug)
       cat_name=Categorys.objects.filter(slug=slug).first()
-      contexts = {'productt':productt,'cat_name':cat_name}
+      carosuelS=carosuel.objects.get()
+
+      paginator = Paginator(productt,4)  # 10 items per page
+
+      page = request.GET.get('page')
+      try:
+                page_data = paginator.page(page)
+                print(page_data,'try')
+      except PageNotAnInteger:
+            # If page is not an integer, display the first page.
+                page_data = paginator.page(1)
+                print(page_data,'except1')
+      except EmptyPage:
+            # If page is out of range, display the last page of results.
+                page_data = paginator.page(paginator.num_pages)
+                print(page_data,'except2')
+
+      except Exception as e:
+            # Handle any other exceptions that may occur.
+                print(f"An error occurred: {e}")
+                page_data = paginator.page(1)
+
+
+
+
+
+      contexts = {'productt':productt,'cat_name':cat_name,'page_data':page_data,'carosuelS':carosuelS}
       return render(request,'user/collections_view.html',contexts)
    else:
     messages.warning(request,"no such file")
     return redirect('collections')
 #single productdetails
-
+@login_required(login_url='login')
 def product_view(request,cate_slug,prod_slug):
     if(Categorys.objects.filter(slug=cate_slug,status=0)):
          if(product_list.objects.filter(slug=prod_slug,status=0)):
@@ -267,9 +297,13 @@ def product_view(request,cate_slug,prod_slug):
 def addtocart(request):
     if request.method=='POST':
         if request.user.is_authenticated:
+            dd=request.user
             prod_id=int(request.POST.get('product_id'))
             product_check= product_list.objects.get(id=prod_id)
-            print("hello")
+            
+            total=product_check.price
+            
+            
 
             if(product_check):
                     if(carts.objects.filter(user=request.user.id,product_id=prod_id)):
@@ -279,10 +313,14 @@ def addtocart(request):
                 
                  
                     prod_qty=int(request.POST.get('product_qty'))
+                    grand=total*prod_qty
+                    
+                    
                     if product_check.quantity >= prod_qty:
                         dd = request.user
+
                         
-                        carts.objects.create(user=dd,product_id=prod_id,product_qty=prod_qty)
+                        carts.objects.create(user=dd,product_id=prod_id,product_qty=prod_qty,total=grand)
                         return JsonResponse({'status':"product added successfully"})
                     else:
                         return JsonResponse({'status':"only "+str(product_check.quantity)+"quantity available"})
@@ -297,13 +335,29 @@ def addtocart(request):
             return JsonResponse({'status':"login to continue"})
     return redirect('index')
 
+@login_required(login_url='login')
 def cart(request):
     dd = request.user
     total=0
+    user_profile = UserProfilepic.objects.filter(user=request.user)
+    print(user_profile)
+    print('dbhs')
+    
+    counter=0
     cart_items = carts.objects.filter(user = dd)
+
     for item in cart_items:
-        total +=item.product.price * item.product_qty
-    context={'cart_items':cart_items,'total':total}
+        total +=item.total
+        counter += 1
+       
+        
+    
+        
+
+    
+    
+
+    context={'cart_items':cart_items,'total':total,'counter':counter,'user_profile':user_profile}
     
     return render(request,'user/cartview.html',context)
 
@@ -317,12 +371,16 @@ def delete_cart(request,id):
 def updatecart(request):
     if request.method=='POST':
         prod_id=int(request.POST.get('product_id'))
+        product_check= product_list.objects.get(id=prod_id)
+        total=product_check.price
         userss=request.user
         users_id=request.user.id
         if(carts.objects.filter(user_id=userss,product_id=prod_id)):
             prod_qty=int(request.POST.get('product_qty'))
             cart=carts.objects.get(user_id=users_id,product_id=prod_id)
+            grand=total*prod_qty
             cart.product_qty=prod_qty
+            cart.total=grand
             cart.save()
             return JsonResponse({'status':"update successfull"})
         
@@ -335,11 +393,14 @@ def checkout(request):
     grand_total = 0
     dd=request.user
     discount = 0
+    button=0
     
     
     addrssz=userdetails.objects.filter(is_default=True,user=request.user)
     cartitems=carts.objects.filter(user=dd)
     address=userdetails.objects.filter(user=dd)
+    for item in address:
+        button=item.fname
 
     for item in cartitems:
         total +=item.product.price * item.product_qty
@@ -354,9 +415,9 @@ def checkout(request):
 
     coupen=coupon.objects.all()
     m=total
-    grand_total = total-discount
-    print(grand_total)
-    context={'cartitems':cartitems,'grand_total':grand_total,'address':address,'addrssz':addrssz,'discount':discount,'m':m,'coupen':coupen}
+    grand_total += total-discount
+    
+    context={'cartitems':cartitems,'grand_total':grand_total,'address':address,'addrssz':addrssz,'discount':discount,'m':m,'coupen':coupen,'button':button}
     return render(request,'user/usercheckout.html',context)
 
 
@@ -365,13 +426,14 @@ def checkout(request):
 
 
 
-#userdetails----------------
+#--------------------------------------------------------------userdetails----------------
 def userdetail(request):
     d=request.user
     idss=request.user.id
     users = User.objects.get(username=d)
     address=userdetails.objects.filter(user=idss)
-    context={'users':users,'address':address}
+    dp=UserProfilepic.objects.filter(user=request.user).first
+    context={'users':users,'address':address,'dp':dp}
     return render(request,'user/userdetails.html',context)
 
 
@@ -446,12 +508,8 @@ def edit_address(request,pk):
 
 def test(request):
     dd=request.user
-    address=userdetails.objects.filter(user=dd)
-    context={
-        'address':address
-
-    }
-    return render(request,'test.html',context)
+    dp=UserProfilepic.objects.filter(user=dd).first
+    return render(request,'test.html',{'dp':dp})
 
 
 #addess set up for order----
@@ -473,13 +531,17 @@ def default(request,id):
 
 #placeorder------
 
+def cashondelivery(request):
+    
+    return render(request,'pay/cash.html')
+
 @csrf_exempt #This skips csrf validation. Use csrf_protect to have validation
 def placeorder(request):
 
     total=0
     
     discount=0
-    
+    button=0
     cart_total_price = 0
     dd=request.user
     payment_mod='cod'
@@ -489,10 +551,10 @@ def placeorder(request):
     addrssz=userdetails.objects.filter(is_default=True,user=request.user)
     cart_ids=carts.objects.filter(user=dd_id)
     tracking_no =( random.randint(100000,999999))
-    # if request.method == 'POST':
-    #     payment_mod= request.POST.get('payment_mode')
-    #     fname=request.POST.get('')
-        # payment_id= request.POST.get('payment_id')
+    
+    
+        
+    
        
     if 'coupons' in request.session:
         coupons=request.session['coupons']
@@ -503,13 +565,13 @@ def placeorder(request):
     
 
     
-    for item in cart_ids:
-        cart_total_price=total+item.product.price*item.product_qty
+     
     
-
+    for item in cart_ids:
+           cart_total_price +=item.product.price * item.product_qty
     cart_total_price -=discount
-    print(cart_total_price)
-    totals=str(cart_total_price)
+   
+    
     
    
     orders = order.objects.create(
@@ -520,9 +582,18 @@ def placeorder(request):
        payment_mode=payment_mod,
        payment_id=payment_id,
        status='Confirmed',
+       discountprice=discount,
+       
     )
     orders.save()
+    grandtotals =sucessamount.objects.create(
+        user=request.user,
+        grandtotal=cart_total_price
+    )
+    
+    grandtotals.save()
     for item in cart_ids:
+        total=item.product.price*item.product_qty
 
         ordersitem = orderitem.objects.create(
                 user=request.user,
@@ -530,6 +601,9 @@ def placeorder(request):
                 product=item.product,
                 price=item.product.price,
                 quantity=item.product_qty,
+                total=total,
+
+                
                     )
         ordersitem.save()
     #dcsrc quantiy from admin stock
@@ -539,40 +613,31 @@ def placeorder(request):
         productz.save()
     cart_ids.delete()
     
-    request.session['totals']=totals
-    return redirect('my_orders')
     
-    # ff={
-    #       'user_ids':user_ids,
-    #       'addrssz':addrssz,
-    #       'cart_ids':cart_ids,
-    # }
-    # # paymode=request.POST.get('payment_mode')
-    # # if (paymode=='COD'):
-    # #     return redirect("/")
-    # # if(paymode=="paid by razorpay"):
-    # #      return JsonResponse({'status':"your oder is successfull"})
-        
-    # return render(request,'user/usercheckout.html',ff)
+    return redirect('orderview')
+    
 
 #show myorder
 
 def orderview(request):
     u=request.user
+    total=0
     oderz=order.objects.filter(user=u)
+    
     ff={
-        'oderz':oderz
+        'oderz':oderz,
+        
     }
     return render(request,'orders/orderview.html',ff)
 
 
 def vieworder(request,tr_id):
-    
+    total=0
     ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
     ord_itm=orderitem.objects.filter(orderit=ord)
-    for item in ord_itm:
-        pr=item.price
+   
     delivered=ord.status=='Delivered'    
+    
     
  
     context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered}
@@ -607,9 +672,15 @@ def pay(request):
 #test
 @csrf_exempt
 def my_orders(request):
-    total=0
-    if 'totals' in request.session:
-        total=request.session['totals']
+
+    usr=sucessamount.objects.filter(user=request.user)
+    for item in usr:
+      total=item.grandtotal
+    usr.delete() 
+    
+    
+    
+    
         
         
     context={'total':total}
@@ -675,7 +746,10 @@ def serach_prdct(request):
 
 #--------------------------about----------------------------------------------
 def about(request):
-    return render(request,'user/About.us.html')
+    carosuelS=carosuel.objects.get()
+    context={'carosuelS':carosuelS}
+
+    return render(request,'user/About.us.html',context)
 
 #-----------------------pdfdownload-----------------------------------------------
 
@@ -684,18 +758,20 @@ class GenerateOrderInvoicePDF(View):
         # Get order from ID in URL parameters
     
         order_id = kwargs.get('order_id')
-        orders = orderitem.objects.get(id=order_id)
-       
         
-
+        ord=order.objects.filter(tracking_no=order_id).filter(user=request.user).first()
+        orders=orderitem.objects.filter(orderit=ord)
+        
+        
         # Render HTML template with order data
-        context = {'orders': orders}
+        context = {'orders': orders,'ord':ord
+                   }
         template = get_template('orders/user_invoice.html')
         html = template.render(context)
 
         # Create PDF response
         pdf = HttpResponse(content_type='application/pdf')
-        pdf['Content-Disposition'] = f'attachment; filename="order_{orders.id}_invoice.pdf"'
+        pdf['Content-Disposition'] = f'attachment; filename="order_{order_id}_invoice.pdf"'
 
         # Generate PDF from HTML
         pisa_status = pisa.CreatePDF(html, dest=pdf)
@@ -731,7 +807,9 @@ def payit(request):
             'total':total,
             'phone':phone,'name':name,
             'id' :str( payment['id']),
+             
         }
+        
         return render(request,'pay/payit.html',context)
   
 #-------------------------------razorpayverification--------------------------------
@@ -771,8 +849,17 @@ def verification_payment(request):
        payment_mode=payment_mod,
        payment_id=payment_id,
        status='Confirmed',
+       discountprice=discount,
     )
     orders.save()
+    grandtotals =sucessamount.objects.create(
+        user=request.user,
+        grandtotal=total
+    )
+    grandtotals.save()
+    for item in cart_ids:
+        total=item.product.price*item.product_qty
+    
     for item in cart_ids:
 
         ordersitem = orderitem.objects.create(
@@ -781,6 +868,7 @@ def verification_payment(request):
                 product=item.product,
                 price=item.product.price,
                 quantity=item.product_qty,
+                total=total,
                     )
         ordersitem.save()
     productz=product_list.objects.filter(id=item.product_id).first()
@@ -831,9 +919,11 @@ def ForgetPassword(request):
         email=request.POST.get('email')
     
         if User.objects.filter(username=username,email=email).first():
-                message = generate_otp()
+               
+                message =generate_otp()
                 sender_email = "asarudheen9472@gmail.com"
                 receiver_email = email
+                subject = "Reset Password OTP"
                 passwords = "pkjposlfjdxinpmf" 
                 X = message
                 request.session['otp'] = X
@@ -842,6 +932,7 @@ def ForgetPassword(request):
                 server.ehlo()
                 server.starttls()
                 server.login(sender_email, passwords)
+                message = 'Subject: {}\n\n{}'.format(subject, message)
                 server.sendmail(sender_email, receiver_email, message)
                 server.quit()
                 request.session['name'] = username
@@ -915,3 +1006,102 @@ def returns(request,tr_id):
         ord.status='Returned'
     ord.save()
     return redirect('orderview')
+
+def placeaddaddress(request):
+    d=request.user
+    users = User.objects.get(username=d)
+    if request.method == 'POST':
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        address = request.POST['address']
+        state = request.POST['state']
+        country = request.POST['country']
+        city = request.POST['city']
+        pincode = request.POST['pincode']
+        user = users
+        hh=len(phone)
+        if hh!=10:
+            messages.info(request,"enter 10 digit number for phonenumber ")
+            return redirect('addaddress')
+    
+        else:
+            newaddress=userdetails.objects.create( fname = fname,
+                                               lname=lname,
+                                               email = email,
+                                               phone=phone,
+                                               address=address,
+                                               state = state,
+                                               city =city,
+                                               pincode=pincode,
+                                               country=country,
+                                               user=user)
+            newaddress.save()
+       
+        return redirect(checkout)
+    return render(request,'user/addnewaddress.html')
+
+#-----------------------------wishlist---------------------------------------
+def wishlists(request):
+    wishlists=wishlist.objects.filter(user=request.user)
+    for item in wishlists:
+        print(item.product.name)
+    context={'wishlists':wishlists}
+    return render(request,'wishlist/wishlist.html',context)
+
+def addwishlist(request):
+    
+    if request.method=='POST':
+        if request.user.is_authenticated:
+            dd=request.user
+            prod_id=int(request.POST.get('product_id'))
+            print(prod_id,'sdhfiiofjsojdojdfojjofdjojifdjfjfd')
+            product_check= product_list.objects.get(id=prod_id)
+            
+            if(product_check):
+                if(wishlist.objects.filter(user=request.user.id,product_id=prod_id)):
+                        return JsonResponse({'status':"product already in wishlist"})
+                else:
+                    wishlist.objects.create(user=request.user,product_id=prod_id)
+                    return JsonResponse({'status':"product added in successfully"})
+            
+            
+            else:
+                return JsonResponse({'status':"no such product found"})
+    
+    
+    
+        else:
+            return JsonResponse({'status':"login to continue"})
+    return redirect('index')
+
+
+
+def delete_wishlist(request,id):
+    wishlists=wishlist.objects.get(id=id)
+    
+    wishlists.delete()
+    return redirect('wishlists')
+
+def edit_profile(request):
+    try:
+        user_profile = UserProfilepic.objects.get(user=request.user)
+    except UserProfilepic.DoesNotExist:
+        user_profile = UserProfilepic(user=request.user)
+
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+        user_profile.profile_picture = request.FILES['profile_picture']
+        user_profile.save()
+        messages.success(request, 'Profile picture updated successfully.')
+        return redirect('userdetails')
+
+    return render(request, 'user/edit_profile.html', {'user_profile': user_profile})
+
+def delete_profile_picture(request):
+   user_profile = UserProfilepic.objects.filter(user=request.user.id).first()
+   print(user_profile)
+   user_profile.delete()
+   return redirect('userdetails')
+
+

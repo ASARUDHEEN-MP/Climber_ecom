@@ -39,6 +39,7 @@
                                             <th>quantity</th>
                                             <th>price</th>
                                             <th>images</th>
+                                            <th>totalprice</th>
                                             
                                             
                                             </tr> 
@@ -49,18 +50,19 @@
                                                         <td>{{item.product.name}}</td>
                                                             <td>{{item.quantity}}</td>
                                                             <td>{{item.price}}</td>
+                                                            
                                                                 <td>
                                                                     <img src="{{item.product.image.url}}" height="50px" width="50px" alt="images">
                                                                 </td>
-                                                                    
+                                                                <td>{{item.total}}</td>
                                                             {% endfor %}
 
                                                     </tbody>   
                                                 </table>
-                                                {% for item in ord_itm %}
-                                                <h4>Price:<span class="float-end">{{item.price}}</span></h4>
-                                                {% endfor %} 
-                                                 <h4>Discount:<span class="float-end">{{discount}}</span></h4> 
+                                               
+                                                <h4>Price:<span class="float-end">{{ord.total_price}}</span></h4>
+                                               
+                                                 <h4>Discount:<span class="float-end">{{ord.discountprice}}</span></h4> 
                                                 <hR>
                                                 
                                                 <h4>Grand Total:<span class="float-end">{{ord.total_price}}</span></h4>
@@ -73,10 +75,11 @@
                                             {% if delivered %}
                                             <a href="{% url 'returns' ord.tracking_no %}" class="btn btn-danger float-end text-white" >Return</a>
                                             {% endif %}
-                                            {% for item in ord_itm %}
-                                            <a href="{% url 'generate_order_invoice' order_id=item.id %}" class="btn btn-primary float-end text-white" >Download invoice</a>
-                                            {% endfor %}
+                                            
+                                            <a href="{% url 'generate_order_invoice' order_id=ord.tracking_no%}" class="btn btn-primary float-end text-white" >Download invoice</a>
+                                            <a href="{%url 'test'%}">
                                            
+                                            </a>
                                     </div>   
 
                                 </div>

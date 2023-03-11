@@ -57,6 +57,7 @@ path('cancelorders/<int:pk>',views.cancelorders,name="cancelorders"),
 path('orderdel',views.orderdel,name="orderdel"),
 path('placeorder',views.placeorder,name="placeorder"),
 path('returns/<str:tr_id>',views.returns,name="returns"),
+path('cashondelivery',views.cashondelivery,name="cashondelivery"),
 
 #onlinepay----------------
 path('my_orders',views.my_orders,name="my_orders"),
@@ -72,8 +73,17 @@ path('about',views.about,name="about"),
 path('order/<int:order_id>/invoice/', GenerateOrderInvoicePDF.as_view(), name='generate_order_invoice'),
 
 path('payit',views.payit,name="payit"),
-path('verification_payment',views.verification_payment,name="verification_payment")
-   
+path('verification_payment',views.verification_payment,name="verification_payment"),
+#placeholder
+path('placeaddaddress',views.placeaddaddress,name="placeaddaddress"),
+
+
+#wishlist
+path('wishlists',views.wishlists,name="wishlists"),
+path('add-to-wishlist',views.addwishlist,name="addwishlist") ,
+path('delete_wishlist/<int:id>',views.delete_wishlist,name='delete_wishlist'),
+path('edit_profile',views.edit_profile,name='edit_profile'),
+path('delete_profile_picture',views.delete_profile_picture,name='delete_profile_picture')
    
 
 ]

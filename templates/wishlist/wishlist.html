@@ -1,0 +1,247 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cart Item View</title>
+  
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrapss.min.css'%}">
+    <!-- style css -->
+
+    
+    
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css'%}">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="{% static 'https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'%}"> 
+    <!-- owl stylesheets --> 
+    {% comment %} <link href="{% static 'https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700,800&display=swap'%}" rel="stylesheet">  {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/min.carousel.css'%}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
+    <link rel="stylesheet" href="{% static 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css'%}" media="screen">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    <!--ALETIFY JS-->
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+     <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/checkout.css'%}">
+ 
+      <!-- style css -->
+     
+      
+      
+     
+      
+
+
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+            
+		}
+        
+		#pay {
+			background-color: white;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			max-width: 600px;
+			margin: 0 auto;
+            margin-top: 200px;
+		}
+		
+		
+		
+        h2{
+            color: #45a049;
+            /* padding: 50px;
+            border-radius: 10px;
+			
+			margin: 0 auto; */
+
+        }
+        .item p {
+			font-size: 16px;
+			color: #666;
+			margin: 10px 0;
+			max-width: 500px;
+			line-height: 1.5;
+		}
+
+		.item button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-left: auto;
+		}
+
+		.item button:hover {
+			background-color: #3E8E41;
+		}
+
+		.item-1 {
+			background-color: #f7f7f7;
+		}
+
+		.item-2 {
+			background-color: #fff;
+		}
+
+		.item-3 {
+			background-color: #f7f7f7;
+		}
+        .item {
+			display: flex;
+			flex-wrap: wrap;
+			margin-bottom: 30px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			padding: 10px;
+			align-items: center;
+		}
+
+		.item img {
+			max-width: 200px;
+			margin-right: 20px;
+			border-radius: 5px;
+		}
+
+		.item h3 {
+			font-size: 20px;
+			margin: 0;
+		}
+
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+        .item button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-left: 20px;
+		}
+        .containers {
+			max-width: 75%;
+			margin: 0 auto;
+			padding: 50px 20px;
+		}
+
+		
+
+        
+	</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+          <!-- Toggle button -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+      
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'cart' %}"><img src="{% static 'images/trolly1.png'%}"></a>
+              </li>
+            </ul>
+            <li><a href="{% url 'wishlists' %}"><i class="fa fa-heart"></i></a></li>
+            <!-- Left links -->
+          </div>
+          <!-- Collapsible wrapper -->
+      
+         
+            <!-- Avatar -->
+            <div class="dropdown">
+              <a
+                class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                href="{% url 'userdetails' %}"
+                id="navbarDropdownMenuAvatar"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                  class="rounded-circle"
+                  height="25"
+                  alt="Black and White Portrait of a Man"
+                  loading="lazy"
+                />
+              </a>
+             
+            </div>
+          </div>
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <div class="py-3 bg-primary">
+        <div class="container">
+            <a class='text-white' href="{% url 'index' %}">Home/</a>
+            <a class='text-white' href="{% url 'wishlists' %}">wishlist</a>
+            
+        </div>
+    </div>
+    
+    <h1>My Wishlist</h1>
+	<div class="containers">
+        {% if wishlists %}
+        {% for items in wishlists %}
+        
+		<div class="item item-1">
+			<img src="{{items.product.image.url}}" alt="Item 1">
+			<div>
+				<h3>{{items.product.name}}</h3>
+				<p>{{items.product.description}}</p>
+                
+			</div>
+            
+            <input type="hidden" class="prod_id" value="{{items.product_id}}">
+            
+             {%csrf_token %}
+             <a href="{% url 'product_view' items.product.category.slug items.product.slug %}"><button class="btn btn-primary">View</button></a> 
+             <a href="delete_wishlist/{{items.id}}"><button class="btn  bg-danger">delete</button></button></a> 
+		</div>
+        
+		
+    
+        {% endfor %}
+        {% else %}
+        <div class="item ">
+      <h4>Your wishlist is empty.</h4>
+        </div>
+       {% endif %}
+		
+	</div>
+    
+</body>
+</html>

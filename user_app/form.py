@@ -1,7 +1,8 @@
 
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django import forms
+from .models import *
 
 
 def send_forget_password_mail(email,token):
@@ -12,6 +13,9 @@ def send_forget_password_mail(email,token):
     recipient_list = [email]
     send_mail(subject,message,email_from,recipient_list)
     return True
+
+
+
 
 
 

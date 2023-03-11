@@ -1,38 +1,98 @@
 {% extends 'user/index1.html'%}
 
-{% block title %}collections{% endblock %}
+{% block title %}Products{% endblock %}
 {% block body %}
-      <div class="cycle_section layout_padding">
-         <div class="container">
-            <h1 class="cycle_taital">Our collections</h1>
-            <p class="cycle_text">It is a long established fact that a reader will be distracted by the </p>
-            <!-- start for loop -->
-            {% for product in productt %}
-            <div class="cycle_section_2 layout_padding">
-               <div class="row">
-                  <div class="col-md-6">
-                     <div class="box_main">
-                        <h6 class="number_text">{{forloop.counter}}</h6>
-                        <div class="image_2"><img src="{{ product.image.url }}"></div>
-                     </div>
-                  </div>
-                  <div class="col-md-6">
-                     <h1 class="col d-grid cycle_taital">{{ product.name }}</h1>
-                     <p class="lorem_text">{{ product.description }}</p>
 
-                     <h4 class="price_text">Price <span style=" color: #f7c17b">$</span> <span style=" color: #325662">{{ product.price | stringformat:'d' }}</span></h4>
-                     
-                     <div class="btn_main">
-                        
-                        <div class="buy_bt"><a href="{% url 'product_view' product.category.slug product.slug %}">View</a></div>
-                        
+ 
+        <!-- new cart -->
+        {% comment %} <div class="about_section layout_padding"> {% endcomment %}
+        <div class="news_section about_section layout_padding">
+         <div class="container">
+            <h1 class="news_taital text-white">Products</h1>
+            <div class="mx-auto w-25">
+              
+               <form action="{% url 'serachprdct' %}" method="POST">
+                  {% csrf_token %}
+               <div class="input-group">
+                  <input type="search" required class="form-control" name="srchbarprdt" placeholder="Search Products" id="searchproduct">
+                  <button  type="submit" class="input-group-text"><i class="fa fa-search"></i></button>
+               </div>
+            </form>
+             </div>
+            <p class="news_text text-white">It is a long established fact that a reader will be distracted by the </p>
+            <div class="news_section_2 layout_padding">
+               <div class="row">
+                  {% for product in page_data %}
+                  
+                  <div class="col-sm-4 ">
+                     <a href="{% url 'product_view' product.category.slug product.slug %}">
+                     <div class="box_main_1 mb-3">
+                        <div class="zoomout frame p-1"><img src="{{ product.image.url }}"></div>
+                        <div class="padding_15 ">
+                           <h2 class="speed_text">{{ product.name }}</h2>
+                           <div class="post_text">Price : <span style=" color: black">{{product.price | stringformat:'d' }}<span style="float: right;"></span></div>
+                           
+                           <p class="long_text">{{ product.description }} </p>
+                        </div>
+                     </a>
                      </div>
                   </div>
-               </div>
+               
+                  {% endfor %}
+                 
+                 
             </div>
          </div>
-      
-            {% endfor %}
+         <nav class="blog-pagination justify-content-center d-flex ">
+            <ul class="pagination ">
+              {% if page_data.has_previous %}
+                <li class="page-item ">
+                  <a class="page-link " href="?page={{ page_data.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+              {% endif %}
+              
+              {% for i in page_data.paginator.page_range %}
+                {% if page_data.number == i %}
+                  <li class="page-item active"><a class="page-link bg-dark" href="#">{{ i }}</a></li>
+                {% elif i > page_data.number|add:'-4' and i < page_data.number|add:'4' %}
+                  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+              {% endfor %}
+              
+              {% if page_data.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_data.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+      </div>
+   </div>
+  </div>
+   </div>
+      <!-- news section end -->
+      <!-- contact section start -->
+     
             
 {% endblock %}
   

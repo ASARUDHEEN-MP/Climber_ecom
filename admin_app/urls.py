@@ -28,7 +28,8 @@ urlpatterns = [
 
    #carousel
     path('view_carousel',views.view_carousel,name='view_carousel'),
-    
+    path('add_carousel',views.add_carousel,name='add_carousel'),
+    path('update_carousel/<int:pk>',views.update_carousel,name='update_carousel'),
 #orders
 path('orders',views.orders,name='orders'),
 path('ordstatus/<int:id>',views.ordstatus,name="ordstatus"),

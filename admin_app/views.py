@@ -8,7 +8,7 @@ from . models import carosuel
 from django.contrib import messages 
 from django.contrib.auth.models import User
 from user_app.models import *
-from . forms import ProductForm,categoryForm,orderForm
+from . forms import ProductForm,categoryForm,orderForm,carosuelForm
 from datetime import datetime
 from django.utils import timezone
 from django.db.models import Q
@@ -192,6 +192,42 @@ def view_carousel(request):
     return render(request,'admin_templates/carouel_list.html',{'product':product}
     )
 
+def add_carousel(request):
+    form = carosuelForm()
+
+    if request.method == 'POST':
+        form = carosuelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('view_carousel')
+    else:
+        form = carosuelForm()
+
+    context = {
+        "form":form
+    }
+
+    return render(request, 'admin_templates/add_carousel.html', context)
+
+
+
+
+def update_carousel(request,pk):
+    carosuels = carosuel.objects.get(id=pk)
+    
+    form = carosuelForm(instance=carosuels)
+
+    if request.method == 'POST':
+        form = carosuelForm(request.POST, request.FILES, instance=carosuels)
+        if form.is_valid():
+            form.save()
+            return redirect('view_category')
+
+    context = {
+        "form":form
+    }
+
+    return render(request, 'admin_templates/update_category.html', context)
 
 #------------------------------------order-------------------------------------------------------------------------------------------
 def orders(request):
