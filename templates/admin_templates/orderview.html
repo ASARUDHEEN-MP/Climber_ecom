@@ -13,6 +13,7 @@
     
    </head>
    <body>
+    
       
 
 <div class="container my-3">
@@ -54,6 +55,7 @@
                                             <th>quantity</th>
                                             <th>price</th>
                                             <th>images</th>
+                                            <th>total</th>
                                             
                                             
                                             </tr> 
@@ -65,17 +67,18 @@
                                                             <td>{{item.quantity}}</td>
                                                             <td>{{item.price}}</td>
                                                                 <td>
-                                                                    <img src="{{item.product.image.url}}" height="300px" width="200px" alt="images">
+                                                                    <img src="{{item.product.image.url}}" height="50px" width="50px" alt="images">
                                                                 </td>
-                                                                    
+                                                                <td>{{item.total}}</td>
                                                             {% endfor %}
 
                                                     </tbody>   
                                                 </table>
-                                             {% for item in ord_itm %}
-                                                <h4>Price:<span class="float-end">{{item.price}}</span></h4>
-                                                {% endfor %} 
-                                               <h4>Discount:<span class="float-end">{{discount}}</span></h4> 
+                                             
+                                                <h4>Price:<span class="float-end">{{total}}</span></h4>
+                                               
+                                                <h4>Discount:<span class="float-end">{{ord.discountprice}}</span></h4> 
+                                                <h4 class="text-success">Delivery Charge:<span class="float-end">  Free</span></h4> 
                                                 <hR>
                                                 <h4>Grand Total:<span class="float-end">{{ord.total_price}}</span></h4>
                                                 <h6 class="border p-2">payment mode:{{ord.payment_mode}}</h6>

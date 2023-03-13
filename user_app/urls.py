@@ -83,7 +83,9 @@ path('wishlists',views.wishlists,name="wishlists"),
 path('add-to-wishlist',views.addwishlist,name="addwishlist") ,
 path('delete_wishlist/<int:id>',views.delete_wishlist,name='delete_wishlist'),
 path('edit_profile',views.edit_profile,name='edit_profile'),
-path('delete_profile_picture',views.delete_profile_picture,name='delete_profile_picture')
+path('delete_profile_picture',views.delete_profile_picture,name='delete_profile_picture'),
    
-
+#wallet
+path('wallet',views.wallets,name="wallet"),
+path('walletamount',views.walletamount,name="walletamount")
 ]

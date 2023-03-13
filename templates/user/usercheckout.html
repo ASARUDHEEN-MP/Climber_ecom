@@ -2,11 +2,91 @@
 
             {% block title %}CHECKOUT {% endblock %}
             {% block body %}
+            {% load static %}
             <!DOCTYPE html>
+
             <html>
             <head>
             </head>
-            <body>
+            <body><nav class="navbar navbar-expand-lg navbar-light bg-white">
+                <!-- Container wrapper -->
+                <div class="container-fluid">
+                  <!-- Toggle button -->
+                  <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <i class="fas fa-bars"></i>
+                  </button>
+              
+                  <!-- Collapsible wrapper -->
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="{% url 'cart' %}"><img src="{% static 'images/trolly1.png'%}"></a>
+                          
+                      </li>
+                      <li><a href="{% url 'wishlists' %}"><i class="fa fa-heart"></i></a></li>
+                      
+                    </ul>
+                    
+                    <!-- Left links -->
+                  </div>
+                  <!-- Collapsible wrapper -->
+              
+                 
+                    <!-- Avatar -->
+                    <div class="dropdown">
+                      <a
+                        class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                        href="{% url 'userdetails' %}"
+                        id="navbarDropdownMenuAvatar"
+                        role="button"
+                        data-mdb-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <img
+                          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                          class="rounded-circle"
+                          height="25"
+                          alt="Black and White Portrait of a Man"
+                          loading="lazy"
+                        />
+                      </a>
+                      <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                      >
+                        <li>
+                          <a class="dropdown-item" href="#">My profile</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="#">Settings</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="#">Logout</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Right elements -->
+                </div>
+                <!-- Container wrapper -->
+              </nav>
                 
             <div class="py-3 bg-primary">
                 <div class="container">
@@ -38,6 +118,7 @@
                                                         <th scope="col">Product Name</th>
                                                         <th scope="col">Quantiy</th>
                                                         <th scope="col">Price</th>
+                                                        <th scope="col">totalprice</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -51,6 +132,7 @@
                                                         <td>{{ item.product_qty}}</td>
                                                         
                                                         <td>{{ item.product.price| stringformat:'d'}}</td>
+                                                        <td>{{ item.total| stringformat:'d'}}</td>
                                                         <input type="hidden" name="productid" value="this._id">
                                                     </tr>
                                                    
@@ -62,6 +144,7 @@
                                                         <td>Grand Total</td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
                                                         <td>{{grand_total| stringformat:'d'}}</td>
                                                     </tr>
                                                 </tfoot>
@@ -71,6 +154,7 @@
                                                         <td>total</td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
                                                         <td>{{m| stringformat:'d'}}</td>
                                                     </tr>
                                                 </tfoot>
@@ -78,14 +162,22 @@
                                                 <tfoot>
                                                     <tr>
                                                         
+                                                        <td class="text-success">Delivery Charge</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="text-success"> Free</td>
+                                                    </tr>
+                                                </tfoot>
+                                                <tfoot>
+                                                    <tr>
+                                                        
                                                         <td>Discount</td>
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td>{{discount| stringformat:'d'}}</td>
                                                     </tr>
-                                                </tfoot>
-                                                <tfoot>
-                                             
                                                 </tfoot>
                                                 {% endif %}
                                             </table>
@@ -116,9 +208,9 @@
                                                   <div class="form-outline flex-fill">
                                                     <input type="text" id="form1" class="form-control form-control-lg" placeholder="Discound code"  name="coupon" aria-label="Search" aria-describedby="search-addon"  />
                                                     
-                                                    {% for messag in messages %}
+                                                    {% comment %} {% for messag in messages %}
                                                         <h6 style="color: red;">{{messag}}</h6>
-                                                    {%endfor%}
+                                                    {%endfor%} {% endcomment %}
                                                   </div>
                                                   <button type="submit" class="btn btn-outline-warning btn-lg ms-2">Apply</button>
                                                 </div>
@@ -143,15 +235,16 @@
                                                    
                                              
                                             
-                                            <button class="btn btn-primary w-100 mt-4 mb-4">online pay|Place Order</button>
+                                            <button class="btn btn-primary w-100 mt-1 mb-2">online pay</button>
                                             </div>
                                         </form> 
                                         <form method="POST" action="cashondelivery">
                                             {%csrf_token%}
                                             <input type='hidden' value='cod' name='cod'>
-                                            <button class="btn btn-success w-100 mt-4 mb-4">cod|Place Order</button>
+                                            <button class="btn btn-success w-100 mt-3 mb-2">Cash On Delivery</button>
                                             
                                         </form> 
+                                        <a href="walletamount"><button class="btn btn-warning w-100 mt-1 mb-5">Wallet</button></a>
                                         </div>
                                     </div>
                                 </div>

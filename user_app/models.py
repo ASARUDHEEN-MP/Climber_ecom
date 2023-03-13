@@ -123,3 +123,10 @@ class UserProfilepic(models.Model):
     # add this field to store the profile picture
     profile_picture = models.ImageField(upload_to='dp', blank=True, null=True)
 
+
+
+class userwallets(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    walletamount=models.FloatField(default=0)
+    
+

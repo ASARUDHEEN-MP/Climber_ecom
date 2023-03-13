@@ -20,6 +20,8 @@
 	<link rel="stylesheet" href="{% static 'css/test/magnific-popup.css'%}">
 	<link rel="stylesheet" href="{% static 'css/test/main.css'%}">
 	
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+	
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <title>{% block title %}{% endblock %}</title>
@@ -40,5 +42,12 @@
 <script src="{% static 'js/jquery-3.6.3.min.js'%}"></script>
 <script src="{% static 'js/checkoutp.js'%}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+     <script> 
+        alertify.set('notifier','position', 'top-right');
+        {% for msg in messages %}
+           alertify.success('{{msg}}');
+        {% endfor %}
+     </script>
 </body>
 </html>

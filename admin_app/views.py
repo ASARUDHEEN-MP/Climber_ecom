@@ -242,8 +242,7 @@ def ordstatus(request,id):
          ord.status='Out_for_delivery'
     elif ord.status =='Out_for_delivery':
          ord.status='Delivered'
-    elif ord.status =='Delivered':
-         ord.status='Returned'
+    
     ord.save()
     print(ord)
     return redirect('orders')
@@ -261,15 +260,16 @@ def deleteord(request,id):
 
 
 def vieworders(request,tr_id):
+    total=0
     ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
     ord_itm=orderitem.objects.filter(orderit=ord)
     for item in ord_itm:
-        pr=item.price
+        total+=item.total
    
     
-    discount=ord.total_price - pr
+    
  
-    context={'ord':ord,'ord_itm':ord_itm,'discount':discount}
+    context={'ord':ord,'ord_itm':ord_itm,'total':total}
     
     return render(request,'admin_templates/orderview.html',context)
     
@@ -402,10 +402,10 @@ def SalesReport(request):
             start_date = datetime.strptime(start_date_str,  '%Y-%m-%d')
             end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
           
-            orderitemlist = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
+            orderitemlist = orderitem.objects.filter(Q(orderit__status ='Delivered') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
            
         else:
-             orderitemlist = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery') )
+             orderitemlist = orderitem.objects.filter(Q(orderit__status ='Delivered') )
         
            
       
@@ -418,7 +418,7 @@ def SalesReport(request):
         Grandtotal=+total+Grandtotal
         
         
-    context={'orderitemlist':orderitemlist,'Grandtotal':Grandtotal}
+    context={'orderitemlist':orderitemlist,'Grandtotal':Grandtotal,'total':total}
     return render(request,'orders/salesreport.html',context)
 
 def excel_sales_report(request):

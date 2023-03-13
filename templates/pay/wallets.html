@@ -1,0 +1,119 @@
+{% extends 'localbase.html'%}
+{% block title %}Add Address{% endblock %}
+{% block body %}
+<hr class="mt-0 mb-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Wallet container */
+.wallet {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+}
+
+/* Balance section */
+.balance {
+  text-align: center;
+}
+
+.balance h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.balance p {
+  font-size: 36px;
+  font-weight: bold;
+  color: #007bff;
+  margin: 0;
+}
+
+/* Buttons section */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deposit-btn {
+  background-color: #28a745;
+}
+
+.withdraw-btn {
+  background-color: #dc3545;
+}
+
+/* Transactions section */
+.transactions {
+  margin-top: 20px;
+}
+
+.transactions h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.transaction-date {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.transaction-description {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.transaction-amount {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+
+
+    </style>
+
+
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wallet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wallet">
+    <div class="balance">
+      <h2>Wallet Balance</h2>
+      <p>{{amount}}</p>
+    </div>
+    {% comment %} <div class="buttons">
+      <button class="btn deposit-btn">Deposit</button>
+      <button class="btn withdraw-btn">Withdraw</button>
+    </div> {% endcomment %}
+    
+</body>
+</html>
+
+
+
+
+</div>
+{% endblock %}

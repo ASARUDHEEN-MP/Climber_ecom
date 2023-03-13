@@ -28,6 +28,7 @@ from django.core.paginator import Paginator, PageNotAnInteger
 
 
 
+
 from.form import send_forget_password_mail
 import uuid
 # Create your views here.
@@ -45,8 +46,14 @@ def login(request):
     
    
     if request.method=='POST':
-        username=request.POST.get('username')
+        usernames=request.POST.get('username')
         password=request.POST.get('password')
+
+        email=User.objects.filter(email=usernames).first()
+        username=email.username
+        
+
+
         try:
             user = authenticate(username = username,password = password)
             
@@ -97,7 +104,8 @@ def signup(request):
             message = generate_otp()
             sender_email = "asarudheen9472@gmail.com"
             receiver_email = email
-            passwords = "pkjposlfjdxinpmf" 
+            passwords = "xazwlscvvoizwvlm"
+            subject = "Climber create account  OTP"
             X = message
             
             request.session['otp'] = X
@@ -106,6 +114,7 @@ def signup(request):
             server.ehlo()
             server.starttls()
             server.login(sender_email, passwords)
+            message = 'Subject: {}\n\n{}'.format(subject, message)
             server.sendmail(sender_email, receiver_email, message)
             server.quit()
             
@@ -240,7 +249,7 @@ def collection_view(request,slug):
       cat_name=Categorys.objects.filter(slug=slug).first()
       carosuelS=carosuel.objects.get()
 
-      paginator = Paginator(productt,4)  # 10 items per page
+      paginator = Paginator(productt,6)  # 10 items per page
 
       page = request.GET.get('page')
       try:
@@ -321,6 +330,9 @@ def addtocart(request):
 
                         
                         carts.objects.create(user=dd,product_id=prod_id,product_qty=prod_qty,total=grand)
+                        wishlists=wishlist.objects.filter(product=prod_id)
+    
+                        wishlists.delete()
                         return JsonResponse({'status':"product added successfully"})
                     else:
                         return JsonResponse({'status':"only "+str(product_check.quantity)+"quantity available"})
@@ -340,8 +352,7 @@ def cart(request):
     dd = request.user
     total=0
     user_profile = UserProfilepic.objects.filter(user=request.user)
-    print(user_profile)
-    print('dbhs')
+    
     
     counter=0
     cart_items = carts.objects.filter(user = dd)
@@ -507,9 +518,9 @@ def edit_address(request,pk):
     return render(request,'user/editaddress.html',context)    
 
 def test(request):
-    dd=request.user
-    dp=UserProfilepic.objects.filter(user=dd).first
-    return render(request,'test.html',{'dp':dp})
+    
+
+    return render(request,'test.html')
 
 
 #addess set up for order----
@@ -635,12 +646,15 @@ def vieworder(request,tr_id):
     total=0
     ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
     ord_itm=orderitem.objects.filter(orderit=ord)
+    for item in ord_itm:
+        total+=item.total
+        
    
     delivered=ord.status=='Delivered'    
     
     
  
-    context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered}
+    context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered,'total':total}
     
     return render(request,'orders/userorderview.html',context)
 
@@ -858,7 +872,8 @@ def verification_payment(request):
     )
     grandtotals.save()
     for item in cart_ids:
-        total=item.product.price*item.product_qty
+        total =item.product.price*item.product_qty
+       
     
     for item in cart_ids:
 
@@ -868,7 +883,7 @@ def verification_payment(request):
                 product=item.product,
                 price=item.product.price,
                 quantity=item.product_qty,
-                total=total,
+                total=item.total,
                     )
         ordersitem.save()
     productz=product_list.objects.filter(id=item.product_id).first()
@@ -924,7 +939,7 @@ def ForgetPassword(request):
                 sender_email = "asarudheen9472@gmail.com"
                 receiver_email = email
                 subject = "Reset Password OTP"
-                passwords = "pkjposlfjdxinpmf" 
+                passwords = "xazwlscvvoizwvlm" 
                 X = message
                 request.session['otp'] = X
             
@@ -1001,11 +1016,26 @@ def repassword(request):
 
 
 def returns(request,tr_id):
-    ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
-    if  ord.status =='Delivered':
+   ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
+   total=ord.total_price
+   grandtotal=total-ord.discountprice
+   print(ord.discountprice)
+   wallets=userwallets.objects.create( user = request.user,
+    
+        walletamount=grandtotal
+    )
+   wallets.save()
+    
+   if  ord.status =='Delivered':
         ord.status='Returned'
-    ord.save()
-    return redirect('orderview')
+        
+   ord.save()
+   
+    
+    
+    
+    
+   return redirect('orderview')
 
 def placeaddaddress(request):
     d=request.user
@@ -1104,4 +1134,109 @@ def delete_profile_picture(request):
    user_profile.delete()
    return redirect('userdetails')
 
+def wallets(request):
+    amount=0
+    total=0
+    grandtotal=0
+    orders=userwallets.objects.filter(user=request.user)
+    for item in orders:
+       total += item.walletamount
+       amount=total
+       
+    return render(request,'pay/wallets.html',{'amount':amount})
 
+def walletamount(request):
+    payment_mod='Wallet amount'
+    payment_id='none'
+    cart_total_price=0
+    discount=0
+    total=0
+    
+    wallet=userwallets.objects.filter(user=request.user)
+    
+    walletamount=0
+    cart_ids=carts.objects.filter(user=request.user)
+    for item in cart_ids:
+           cart_total_price +=item.product.price * item.product_qty
+    
+    tracking_no =( random.randint(100000,999999))
+    if 'coupons' in request.session:
+        coupons=request.session['coupons']
+        coup = coupon.objects.get(coupon_code=coupons)
+        discount = coup.discount
+        del request.session['coupons']
+        
+          
+
+
+    cart_total_price -= discount
+    
+    for item in wallet:
+        
+       walletamount = item.walletamount
+    
+    
+    grandtotal = float(walletamount)-float(cart_total_price)
+    
+    
+    
+    
+    
+    if cart_total_price <= walletamount:
+                orders = order.objects.create(
+                user=request.user,
+                total_price=cart_total_price,
+                address=userdetails.objects.get(is_default=True,user=request.user),
+                tracking_no=tracking_no,
+                payment_mode=payment_mod,
+                payment_id=payment_id,
+                status='Confirmed',
+                discountprice=discount,
+                
+                )
+                orders.save()
+                grandtotals =sucessamount.objects.create(
+                user=request.user,
+                grandtotal=cart_total_price
+                )
+    
+                grandtotals.save()
+                for item in cart_ids:
+                    total=item.product.price*item.product_qty
+
+                    ordersitem = orderitem.objects.create(
+                            user=request.user,
+                            orderit=orders,
+                            product=item.product,
+                            price=item.product.price,
+                            quantity=item.product_qty,
+                            total=total,
+
+                            
+                                )
+                    ordersitem.save()
+                for item in cart_ids:
+                    productz=product_list.objects.filter(id=item.product_id).first()
+                    productz.quantity=productz.quantity-item.product_qty
+                    productz.save()
+                cart_ids.delete()
+                
+                
+                wallet=userwallets.objects.filter(user=request.user)
+                for item in wallet:
+                    item.walletamount=grandtotal
+                    item.save()
+                
+                
+                return redirect('my_orders')
+    else:
+        messages.info(request,'Wallet has insufficent balance')
+        return redirect('checkout')
+                
+                    
+        
+
+    
+    
+    
+    

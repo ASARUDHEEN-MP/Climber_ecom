@@ -64,7 +64,7 @@
               {% for i in page_data.paginator.page_range %}
                 {% if page_data.number == i %}
                   <li class="page-item active"><a class="page-link bg-dark" href="#">{{ i }}</a></li>
-                {% elif i > page_data.number|add:'-4' and i < page_data.number|add:'4' %}
+                {% elif i > page_data.number|add:'-6' and i < page_data.number|add:'6' %}
                   <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
               {% endfor %}

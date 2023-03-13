@@ -55,14 +55,17 @@
                                                                     <img src="{{item.product.image.url}}" height="50px" width="50px" alt="images">
                                                                 </td>
                                                                 <td>{{item.total}}</td>
-                                                            {% endfor %}
+                                                                {% endfor %}
+                                                            
 
                                                     </tbody>   
                                                 </table>
                                                
-                                                <h4>Price:<span class="float-end">{{ord.total_price}}</span></h4>
+                                                <h4>Price:<span class="float-end">{{total}}</span></h4>
+                                                
                                                
                                                  <h4>Discount:<span class="float-end">{{ord.discountprice}}</span></h4> 
+                                                 <h4 class="text-success">Delivery Charge:<span class="float-end">  Free</span></h4> 
                                                 <hR>
                                                 
                                                 <h4>Grand Total:<span class="float-end">{{ord.total_price}}</span></h4>
