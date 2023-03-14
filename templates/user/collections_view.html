@@ -27,7 +27,7 @@
                   <div class="col-sm-4 ">
                      <a href="{% url 'product_view' product.category.slug product.slug %}">
                      <div class="box_main_1 mb-3">
-                        <div class="zoomout frame p-1"><img src="{{ product.image.url }}"></div>
+                        <div class="zoomout frame p-1"><img style="height: 200px; width: 300px;" src="{{ product.image.url }}"></div>
                         <div class="padding_15 ">
                            <h2 class="speed_text">{{ product.name }}</h2>
                            <div class="post_text">Price : <span style=" color: black">{{product.price | stringformat:'d' }}<span style="float: right;"></span></div>

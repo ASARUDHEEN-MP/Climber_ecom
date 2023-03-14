@@ -48,13 +48,14 @@ def login(request):
     if request.method=='POST':
         usernames=request.POST.get('username')
         password=request.POST.get('password')
-
-        email=User.objects.filter(email=usernames).first()
-        username=email.username
+        
+       
         
 
 
         try:
+            email=User.objects.filter(email=usernames).first()
+            username=email.username
             user = authenticate(username = username,password = password)
             
             
@@ -1075,8 +1076,6 @@ def placeaddaddress(request):
 #-----------------------------wishlist---------------------------------------
 def wishlists(request):
     wishlists=wishlist.objects.filter(user=request.user)
-    for item in wishlists:
-        print(item.product.name)
     context={'wishlists':wishlists}
     return render(request,'wishlist/wishlist.html',context)
 
@@ -1086,7 +1085,6 @@ def addwishlist(request):
         if request.user.is_authenticated:
             dd=request.user
             prod_id=int(request.POST.get('product_id'))
-            print(prod_id,'sdhfiiofjsojdojdfojjofdjojifdjfjfd')
             product_check= product_list.objects.get(id=prod_id)
             
             if(product_check):

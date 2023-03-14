@@ -133,7 +133,7 @@ def updatecatgory(request,pk):
         "form":form
     }
 
-    return render(request, 'admin_templates/update_Product.html', context)
+    return render(request, 'admin_templates/update_product.html', context)
 
 
 #PRODUCT collection
@@ -391,6 +391,7 @@ def filterchart(request):
 
 #-----------------------salesReport--------------------------------------------------
 def SalesReport(request):
+    total=0
     if request.method == 'GET':
         start_date_str = request.GET.get('start_date')
         end_date_str = request.GET.get('end_date')
