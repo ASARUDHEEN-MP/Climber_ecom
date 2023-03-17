@@ -23,6 +23,7 @@ urlpatterns = [
    path('collections',views.collections,name='collections'),
    path('collections/<str:slug>',views.collection_view,name='collection_view'),
    path('collections/<str:cate_slug>/<str:prod_slug>',views.product_view,name='product_view'),
+   path('allproducts',views.allproducts,name="allproducts"),
    #search
    path('product-list',views.productlistsajax),
    path('serachprdct',views.serach_prdct,name="serachprdct"),
@@ -58,7 +59,9 @@ path('orderdel',views.orderdel,name="orderdel"),
 path('placeorder',views.placeorder,name="placeorder"),
 path('returns/<str:tr_id>',views.returns,name="returns"),
 path('cashondelivery',views.cashondelivery,name="cashondelivery"),
-
+path('refund',views.refund,name="refund"),
+path('cancelsuccess',views.cancelsuccess,name="cancelsuccess"),
+path('refundsuccess',views.refundsuccess,name="refundsuccess"),
 #onlinepay----------------
 path('my_orders',views.my_orders,name="my_orders"),
 # path('proceed-to-pay',views.razorpay),

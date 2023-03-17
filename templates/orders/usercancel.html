@@ -1,0 +1,85 @@
+{% extends "basepass.html"%}
+{% block title %}Climber | Order{% endblock%}
+{% block start %}
+{% load static%}
+
+
+<div class="container h-100 w-100">
+
+    <div class="row h-100 w-100">
+        <div class="col-12 mx-auto d-table h-100 w-50">
+            <div class="d-table-cell align-middle">
+  
+                <div class="text-center mt-4">
+                   
+                    
+  
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-sm-4">
+  
+                            {% if messages %}
+
+                            {% for message in messages %}
+                            <div class="alert alert-info">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                                
+                            
+								
+                              
+                                <div class="form-group">
+                                    <h1 class="h2" style="color: rgb(5, 5, 6);"> Cancellation Confirm </h1>
+									
+                                </div>
+                                <div class="form-group">
+                                    <h1 class="h2" style="color: rgb(5, 5, 6);">  ₹ {{amount}}</h1>
+									
+                                </div>
+                                
+                                <img src="{% static 'images/success.jpeg'%}" alt="Success Icon" style="width:90px;">
+                                <div class="form-group">
+                                    
+									
+                                </div>
+                               
+                                <div class="text-center mt-3">
+                                   
+                                    {% if payment_mode == 'razorpay'%}
+                                    <a href="{% url 'refundsuccess'%}">
+                                    <button  class="btn btn-warning">
+                                      <span class="glyphicon glyphicon-share-alt"></span>
+                                      Proceed to refund  
+                                    </button>
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'orderview'%}">
+                                    <button  class="btn btn-warning">
+                                        <span class="glyphicon glyphicon-share-alt"></span>
+                                        Confirm  
+                                      </button>
+                                    </a>
+                                      {% endif %}
+                              
+                                  </div> 
+								  
+                            
+                            
+							
+								  
+								 
+								
+								
+							  </div> 
+							
+                        </div>
+                    </div>
+                </div>
+  
+            </div>
+        </div>
+    </div>
+  </div>
+  {% endblock %}

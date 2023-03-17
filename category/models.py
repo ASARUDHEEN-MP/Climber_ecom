@@ -17,16 +17,11 @@ class Categorys(models.Model):
         return self.category_name
 
 class products(models.Model):
-    image = models.ImageField(upload_to='products',null=False, blank=False)
-    name = models.CharField(max_length=200, null=False, blank=False)
-    category = models.ForeignKey(Categorys, on_delete=models.CASCADE, default=False, null=True)
+    
     price = models.DecimalField(max_digits=6, decimal_places=1)
     description = models.TextField()
-    is_published = models.BooleanField(default=True)
-    slug = models.CharField(max_length=140, default='SOME STRING',null=False,blank=False)
-    status=models.BooleanField(default=False,help_text="0=default,1=Hidden")
-    quantity = models.IntegerField(default=0)
-   
+    
+    
 
     def __str__(self):
         return self.name
@@ -45,8 +40,8 @@ class product_list(models.Model):
     slug = models.CharField(max_length=140, default='SOME STRING',null=False,blank=False)
     status=models.BooleanField(default=False,help_text="0=default,1=Hidden")
     quantity = models.IntegerField(default=0)
-   
-
+    discountprice=models.FloatField(default=0)
+    orginalprice=models.FloatField(default=0)
     def __str__(self):
         return self.name
     

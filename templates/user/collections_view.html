@@ -7,6 +7,25 @@
         <!-- new cart -->
         {% comment %} <div class="about_section layout_padding"> {% endcomment %}
         <div class="news_section about_section layout_padding">
+          <div class="ml-5">
+          <h1 class=" text-white">CATEGORIES</h1>
+          {% for item in categorys %}
+          {% if button != item.slug %}
+          <a href="{% url 'collection_view' item.slug  %}">
+               
+          <button type="button" class="btn btn-light">{{item.category_name}}</button>
+     
+    </a>
+        {% endif %}
+        
+          {% endfor %}
+          
+          <a href="{% url 'allproducts' %}">
+            <button type="button" class="btn btn-light">All</button>
+            </a>
+          
+          </div>
+         
          <div class="container">
             <h1 class="news_taital text-white">Products</h1>
             <div class="mx-auto w-25">
@@ -21,19 +40,27 @@
              </div>
             <p class="news_text text-white">It is a long established fact that a reader will be distracted by the </p>
             <div class="news_section_2 layout_padding">
-               <div class="row">
+               <div class="row ">
                   {% for product in page_data %}
                   
                   <div class="col-sm-4 ">
                      <a href="{% url 'product_view' product.category.slug product.slug %}">
                      <div class="box_main_1 mb-3">
                         <div class="zoomout frame p-1"><img style="height: 200px; width: 300px;" src="{{ product.image.url }}"></div>
-                        <div class="padding_15 ">
+                        <div class="p-3">
+                          
                            <h2 class="speed_text">{{ product.name }}</h2>
-                           <div class="post_text">Price : <span style=" color: black">{{product.price | stringformat:'d' }}<span style="float: right;"></span></div>
+                           <div class="post_text">Price : <span style=" color: black">{{product.price | stringformat:'d' }}<span style="float: right;"></span> <span style="color:black"><strike>₹{{product.orginalprice | stringformat:'d' }}</strike></span></div>
                            
-                           <p class="long_text">{{ product.description }} </p>
+<div>
+                           {% if product.quantity > 0 %}
+                           <label class=" bg-success text-white px-1 rounded">IN STOCK</label>
+                         {% else %}
+                           <label class=" bg-danger text-white px-1 rounded">Stockout</label>
+                         {% endif %}
+                         <label class="" style="color:green;">20% off</label>
                         </div>
+                      </div>
                      </a>
                      </div>
                   </div>
@@ -93,7 +120,7 @@
       <!-- news section end -->
       <!-- contact section start -->
      
-            
+      
 {% endblock %}
   
 

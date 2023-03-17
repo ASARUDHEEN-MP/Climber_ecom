@@ -32,13 +32,14 @@
                                                         <th>{{items.status}}<th>
                                                         <th>{{items.payment_mode}}<th>
                                                            <a href="{% url 'vieworder' items.tracking_no %}" class="btn btn-primary">View</a>
-                                                           {% if items.status != 'Delivered' and items.status != 'Returned' %}
+                                                           {% if items.status != 'Delivered' and items.status != 'Returned' and items.status != 'Cancelled' and items.status != 'refund'%}
                                                            <a href="cancelorders/{{items.pk}}" class="btn btn-danger">cancel the order</a>
                                                            {% endif %}
+                                                           
                                                             <tr>
                                                 {% endfor %}
-
-                                        </tbody>   
+                                               
+                                        </tbody>    
                                     </table>
                                 </div>    
                             </div>    

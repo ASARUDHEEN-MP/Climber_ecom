@@ -67,7 +67,8 @@ class order(models.Model):
        
         ('Delivered','Delivered'),
         ('Cancelled','Cancelled'),
-        ('Returned','Returned')
+        ('Returned','Returned'),
+        ('Refund','Refund'),
     )
     status  =   models.CharField(max_length=30, choices=STATUS, default='pending')
     message=models.TextField(null=True)

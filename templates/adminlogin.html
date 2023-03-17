@@ -1,4 +1,80 @@
+{% extends "basepass.html"%}
+{% block title %}Climber | login{% endblock%}
+{% block start %}
 {% load static %}
+
+<div class="wrapper fadeInDown">
+<div class="continer">
+    <form method="post" class="form" id="form">
+
+        <h1>Login</h1>
+        {% csrf_token %}
+        {% if messages %}
+
+        {% for message in messages %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="form-group">
+            <label for="username">username</label>
+            <input type="text" id="username" name="username" id="name" class="form-control" placeholder="Enter The Your Email" >
+        
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password"  class="form-control" placeholder="Enter The Your Password" >
+           
+        </div>
+
+        
+        {% comment %} <a href="{% url 'forget_password'%}">Forget Password</a>
+        <a href="{% url 'register'%}">Register</a> {% endcomment %}
+
+        <button class="btn btn-danger mt-4" type="submit">Submit</button>
+
+    </form>
+    
+</div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +83,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'images\logo1.png' %}" type="">
     <link rel="stylesheet" type="text/css" href="{% static 'css/loginn.css'%}" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+
+
 
 <!------ Include the above in your HEAD tag ---------->
     <title>climber | login</title>
@@ -18,37 +98,45 @@
       
           <!-- Icon -->
           <div class="fadeIn first">
-            <h1>Admin</h1>
-            
+            <h3>climber</h3>
+            <img width="90" src="{% static 'images\logo1.png' %}" id="icon" alt="User Icon" />
             
           </div>
-          <form method="POST">
+          <form method="post">
             {%csrf_token%}
             <div class="input-group form-group">
                 <div class="input-group-prepend">
             <input type="text" id="username" name="username" id="name" class="form-control" placeholder="Username" required data-error="Please enter your name">
-            <input type="text"  name="password" id="password" class="form-control" placeholder="Password" required data-error="Please enter your message subject">
+            <input type="password"  name="password" id="password" class="form-control " placeholder="Password" >
+            
             <div class="form-group">
+              <div style="color: red;">
+                  
+                {% for messag in messages %}
+                    <h6>{{messag}}</h6>
+                {%endfor%}
+              </div>
             
             <input type="submit"  id="submit" class="login-btn" value="Log In">
           </form>
           
-            
+            <a class="underlineHover" href="{% url 'signup' %}">Create new account</a>
             
       
 
 
           <div id="formFooter">
-            <a class="underlineHover" href="#">Forgot Password?</a>
+            <a class="underlineHover" href="{% url 'forget_password'%}">Forgot Password?</a>
+            
           </div>
       
         </div>
       </div>
+      
 </body>
 
 
 
 
 
-</html>
-
+</html> {% endcomment %}

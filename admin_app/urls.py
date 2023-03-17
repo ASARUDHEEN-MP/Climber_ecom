@@ -6,11 +6,16 @@ urlpatterns = [
    path ('',views.adminlogin,name='adminlogin'),
    path ('adminpanel',views.adminpanel,name='adminpanel'),
    path ('logout',views.logout,name='logout'),
+
+   #user
    path('user_mgmt',views.user_mgmt,name='user_mgmt'),
    path('blockuser/<int:pk>',views.block_user,name='block_user'),
    path('unblockuser/<int:id>',views.unblock_user,name='unblock_user'),
    path('adminpanel',views.admindashboard,name='admindashboard'),
    path('delete/<int:id>',views.delete,name='delete'),
+  
+   
+   
  
 
    #categories

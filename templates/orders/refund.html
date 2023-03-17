@@ -1,0 +1,68 @@
+ 
+ {% extends "basepass.html"%}
+ {% block title %}Climber | Order{% endblock%}
+ {% block start %}
+ {% load static%}
+ 
+ 
+ <div class="container h-100 w-100">
+ 
+     <div class="row h-100 w-100">
+         <div class="col-12 mx-auto d-table h-100 w-50">
+             <div class="d-table-cell align-middle">
+   
+                 <div class="text-center mt-4">
+                    
+                     
+   
+                 <div class="card">
+                     <div class="card-body">
+                         <div class="m-sm-4">
+   
+                             {% if messages %}
+ 
+                             {% for message in messages %}
+                             <div class="alert alert-info">
+                                 {{ message }}
+                             </div>
+                             {% endfor %}
+                             {% endif %}
+                                 
+                             
+                                 
+                               
+                             {% block content %}
+                             <h1>Refund Successful</h1>
+                             <img src="{% static 'images/success.jpeg'%}" alt="Success Icon" style="width:40px;">
+                             <p>Your refund has been processed successfully.</p>
+                         {% endblock %}
+                                
+                                 <div class="text-center mt-3">
+                                     <a href="{% url 'orderview'%}">
+                                    
+                                     <button  class="btn btn-warning">
+                                       <span class="glyphicon glyphicon-share-alt"></span>
+                                       ok  
+                                     </button>
+                                    
+                                 </a>
+                                   </div> 
+                                   
+                             
+                             
+                             
+                                   
+                                  
+                                 
+                                 
+                               </div> 
+                             
+                         </div>
+                     </div>
+                 </div>
+   
+             </div>
+         </div>
+     </div>
+   </div>
+   {% endblock %}

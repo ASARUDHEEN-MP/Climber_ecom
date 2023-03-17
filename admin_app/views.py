@@ -18,6 +18,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.db.models import Q
 
 
 
@@ -63,7 +64,13 @@ def logout(request):
 #usermanagment------
 def user_mgmt(request):
     users = User.objects.filter(is_superuser=False)
+    
     return render(request,'admin_templates/usermanagment.html',{'users':users})
+
+
+
+
+
 
 def block_user(request,pk):
     user = User.objects.get(id =pk)
@@ -88,7 +95,8 @@ def delete(request,id):
 
 
 
-#categories
+
+#------------------------categories----------------------------------------------
 def view_category(request):
     category = Categorys.objects.all()
     return render(request,'admin_templates/category.html',{'category':category})
@@ -136,7 +144,7 @@ def updatecatgory(request,pk):
     return render(request, 'admin_templates/update_product.html', context)
 
 
-#PRODUCT collection
+#----------------------------------PRODUCT collection---------------------------------
 
 def collection_list(request):
     product = product_list.objects.all()
@@ -433,9 +441,9 @@ def excel_sales_report(request):
     if start_date_str is not None:
               start_date = datetime.strptime(start_date_str,  '%Y-%m-%d')
               end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-              orders = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
+              orders = orderitem.objects.filter(Q(orderit__status ='Delivered') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
     else:
-            orders = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery'))
+            orders = orderitem.objects.filter(Q(orderit__status ='Delivered'))
 
     for order in orders:
         sales_data.append([
@@ -467,9 +475,9 @@ def pdf_dwnld(request):
     if start_date_str is not None:
             start_date = datetime.strptime(start_date_str,  '%Y-%m-%d')
             end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-            orders = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
+            orders = orderitem.objects.filter(Q(orderit__status ='Delivered') & Q(orderit__created_at__date__gte = start_date) & Q(orderit__created_at__date__lte = end_date))
     else:
-         orders = orderitem.objects.filter(Q(orderit__status ='Out_for_delivery'))
+         orders = orderitem.objects.filter(Q(orderit__status ='Delivered'))
 
 
     # for item in orders:

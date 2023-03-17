@@ -8,6 +8,8 @@ admin.site.register(carts)
 admin.site.register(orderitem)
 admin.site.register(coupon)
 admin.site.register(sucessamount)
+admin.site.register(Used_Coupon)
+
 
 
 

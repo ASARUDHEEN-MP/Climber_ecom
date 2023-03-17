@@ -7,7 +7,7 @@ from user_app.models import *
 class ProductForm(forms.ModelForm):
     class Meta:
         model = product_list
-        fields = ['image','image1','image2','image3', 'name', 'category', 'price', 'description','quantity','slug']
+        fields = ['image','image1','image2','image3', 'name', 'category', 'price', 'description','quantity','slug','orginalprice']
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'image1': forms.FileInput(attrs={'class': 'form-control'}),
@@ -19,6 +19,7 @@ class ProductForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'quantity': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            'orginalprice': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 

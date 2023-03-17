@@ -8,7 +8,9 @@
             <html>
             <head>
             </head>
-            <body><nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <body >
+              
+              <nav class="navbar navbar-expand-lg navbar-light bg-white">
                 <!-- Container wrapper -->
                 <div class="container-fluid">
                   <!-- Toggle button -->
@@ -50,7 +52,7 @@
               
                  
                     <!-- Avatar -->
-                    <div class="dropdown">
+                    <div class="dropdown" >
                       <a
                         class="dropdown-toggle d-flex align-items-center hidden-arrow"
                         href="{% url 'userdetails' %}"
@@ -88,7 +90,7 @@
                 <!-- Container wrapper -->
               </nav>
                 
-            <div class="py-3 bg-primary">
+            <div class="py-3" style="background-color: #f7c17b;">
                 <div class="container">
                     <a class='text-white' href="{% url 'index' %}">Home/</a>
                     <a class='text-white' href="cart">cart/</a>
@@ -100,20 +102,20 @@
             
            
                     <!--End Page Title-->
-                  <div class="container">
+                  <div class="container" >
                         <div class="row ">
 
 
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                 <div class="your-order-payment">
-                                    <div class="your-order">
-                                        <h2 class="order-title mb-4">Your Order</h2>
+                                    <div class="your-order mt-5">
+                                        <h2 class="order-title mb-3">Your Order</h2>
             
-                                        <div class="table-responsive-sm order-table table-bordered">
+                                        <div class="table-responsive-sm order-table border-0">
                                             <table class="table">
                                                 <thead>
                                                     {% if cartitems %}
-                                                    <tr>
+                                                    <tr class="">
                                                         <th scope="col">image</th>
                                                         <th scope="col">Product Name</th>
                                                         <th scope="col">Quantiy</th>
@@ -184,7 +186,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="your-payment ">
+                                    <div class="your-payment mt-5 ">
                                         <h3 class="payment-title mb-3 mt-4">Coupon</h3>
                                         <hr>
                                      
@@ -251,21 +253,29 @@
                             </div>
                             
                         
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 sm-margin-30px-bottom d-flex flex-column">
                                 <div class="create-ac-content bg-light-gray padding-20px-all">
                                     <br><br>
                                     <h2>Deliver to:</h2>
                                     <hr>
-                                    <a href="{% url 'placeaddaddress'%}">
-                                    <button type="button"  class="btn btn-primary me-3 float-start addToCartBtn">Add Address  <i class="fa fa-map-marker"></i></button>
-                                </a>
+                                    
+                              </div>
+
+                              <ul class="list-group mb-3">
+                                <li class="d-flex justify-content-between my-3">
+                                
+                              <a href="{% url 'placeaddaddress'%}">
+                                <button type="button"  class="btn btn-primary me-3 float-start addToCartBtn">Add Address  <i class="fa fa-map-marker"></i></button>
+                            </a>
+                          </li>
                                 {% if button  == 0%}
                             <h4 class='text-danger'>Please Add Your Address</h4>
                             {% endif %}
-                                    <div class="row">
-                                    {% for adress in address %}
-                                <ul class="list-group mb-3"></ul>
-                                <li class="list-group-item d-flex justify-content-between lh-sm">
+                            {% for adress in address %}
+
+                                    <div class="row ms-1">
+
+                                <li class="list-group-item d-flex p-2 justify-content-between lh-sm " style="max-width:30rem">
                                    
                                     <div class="form-check">
                                         <!-- <input type="checkbox" class="form-check-input" name="" id="same-address">
@@ -313,7 +323,7 @@
                 </div>
             </div>
             
-            
+         
             {% endblock %}  
             {% block scripts %}
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

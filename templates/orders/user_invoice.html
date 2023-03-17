@@ -61,7 +61,20 @@
     <h1>Sales Invoice</h1>
     <div class="invoice-info">
       <p>Invoice No: {{ord.tracking_no}}</p>
+      <p>Payment Method: {{ord.payment_mode}}</p>
       <p>Date: {{ord.created_at.date}}</p>
+      <p>Delivered To: <br>{{ord.address.fname}}
+        <br>
+        {{ord.address.phone}}
+        <br>
+        {{ord.address.city}}
+        <br>
+        {{ord.address.state}}
+        <br>
+        {{ord.address.pincode}}
+      </p>
+     
+     
     </div>
     <table>
       <thead>
@@ -93,7 +106,7 @@
         </tr>
       </tfoot>
     </table>
-    <h4 class="thank-you">Thank you for your business!</h4>
+    <h4 class="thank-you">Thank you !</h4>
   </div>
 
 </body>

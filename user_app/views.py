@@ -36,7 +36,25 @@ import uuid
 def index(request):
     categorys = Categorys.objects.filter(status=0)
     carosuelS=carosuel.objects.get()
-    context={'categorys':categorys,'carosuelS':carosuelS}
+    paginator = Paginator(categorys,2)
+    page = request.GET.get('page')
+    try:
+                page_data = paginator.page(page)
+                
+    except PageNotAnInteger:
+            # If page is not an integer, display the first page.
+                page_data = paginator.page(1)
+                
+    except EmptyPage:
+            # If page is out of range, display the last page of results.
+                page_data = paginator.page(paginator.num_pages)
+                
+
+    except Exception as e:
+            # Handle any other exceptions that may occur.
+                
+                page_data = paginator.page(1)
+    context={'categorys':categorys,'carosuelS':carosuelS,'page_data':page_data}
     return render(request,'user/index1.html',context)
 #----------------------------------------------------------login----------------------------------
 @cache_control(no_cache =True, must_revalidate =False, no_store =True)
@@ -136,7 +154,7 @@ def signup(request):
 
 
 
-
+#-----------------------------------otp---------------------------------
 
 def generate_otp(length=6):
     return ''.join(secrets.choice("0123456789") for i in range(length))
@@ -224,7 +242,7 @@ def ChangePassword(request , token):
     return render (request,'resetpassword/change_password.html',context)
 
 
-#------------------------------userlogout---------
+#------------------------------userlogout---------------------------
 
 @cache_control(no_cache = True,must_revalidate = False,no_store = True)
 def user_logout(request):
@@ -234,52 +252,84 @@ def user_logout(request):
         return redirect(index)
         
 
-#categry
+#-----------------------------categry-------------------------------
 def collections(request):
     categorys = Categorys.objects.filter(status=0)
     context={'categorys':categorys}
     return render(request,'categories.html',context)
 
 
-#collections
+#--------------------------collections------------------------------
 
 
 def collection_view(request,slug):
    if(Categorys.objects.filter(slug=slug,status=0)):
+      button=slug
       productt=product_list.objects.filter(category__slug=slug)
       cat_name=Categorys.objects.filter(slug=slug).first()
+      categorys = Categorys.objects.filter(status=0)
       carosuelS=carosuel.objects.get()
 
       paginator = Paginator(productt,6)  # 10 items per page
 
       page = request.GET.get('page')
+   
+      
       try:
                 page_data = paginator.page(page)
-                print(page_data,'try')
+                
       except PageNotAnInteger:
             # If page is not an integer, display the first page.
                 page_data = paginator.page(1)
-                print(page_data,'except1')
+                
       except EmptyPage:
             # If page is out of range, display the last page of results.
                 page_data = paginator.page(paginator.num_pages)
-                print(page_data,'except2')
+                
 
       except Exception as e:
             # Handle any other exceptions that may occur.
-                print(f"An error occurred: {e}")
+                
                 page_data = paginator.page(1)
 
 
 
 
 
-      contexts = {'productt':productt,'cat_name':cat_name,'page_data':page_data,'carosuelS':carosuelS}
+      contexts = {'productt':productt,'cat_name':cat_name,'page_data':page_data,'carosuelS':carosuelS,'categorys':categorys,'button':button}
       return render(request,'user/collections_view.html',contexts)
    else:
     messages.warning(request,"no such file")
     return redirect('collections')
-#single productdetails
+ #-----------------------------------All products-------------------------------------------------------
+
+def allproducts(request):
+    productt=product_list.objects.all()
+    carosuelS=carosuel.objects.get()
+    categorys = Categorys.objects.filter(status=0)
+    
+    
+    paginator = Paginator(productt,6) 
+    page = request.GET.get('page')
+    try:
+                page_data = paginator.page(page)
+                print(page_data,'try')
+    except PageNotAnInteger:
+            # If page is not an integer, display the first page.
+                page_data = paginator.page(1)
+                print(page_data,'except1')
+    except EmptyPage:
+            # If page is out of range, display the last page of results.
+                page_data = paginator.page(paginator.num_pages)
+                print(page_data,'except2')
+
+    except Exception as e:
+            # Handle any other exceptions that may occur.
+                print(f"An error occurred: {e}")
+                page_data = paginator.page(1)
+    contexts = {'productt':productt,'page_data':page_data,'carosuelS':carosuelS,'categorys':categorys,}
+    return render(request,'user/collections_view.html',contexts)
+#-------------------------------------single productdetails----------------------------------------------
 @login_required(login_url='login')
 def product_view(request,cate_slug,prod_slug):
     if(Categorys.objects.filter(slug=cate_slug,status=0)):
@@ -420,11 +470,10 @@ def checkout(request):
     if 'coupons' in request.session:
         coupons=request.session['coupons']
         coup = coupon.objects.get(coupon_code=coupons)
+        coupss=coup.coupon_code
         discount = coup.discount
-        print(discount)
         messages.info(request,'')
         Used_Coupon.objects.create(user = user,coupon = coup )
-
     coupen=coupon.objects.all()
     m=total
     grand_total += total-discount
@@ -517,10 +566,10 @@ def edit_address(request,pk):
        address.save()
        return redirect(userdetail)
     return render(request,'user/editaddress.html',context)    
-
+from django.db.models import Q
 def test(request):
+    ued=Used_Coupon.objects.filter(user=request.user)
     
-
     return render(request,'test.html')
 
 
@@ -551,17 +600,15 @@ def cashondelivery(request):
 def placeorder(request):
 
     total=0
-    
+    coupons=0
     discount=0
     button=0
+    coup=0
     cart_total_price = 0
     dd=request.user
     payment_mod='cod'
     payment_id='none'
-    dd_id=request.user.id
-    user_ids=User.objects.get(username=dd)
-    addrssz=userdetails.objects.filter(is_default=True,user=request.user)
-    cart_ids=carts.objects.filter(user=dd_id)
+    cart_ids=carts.objects.filter(user=request.user)
     tracking_no =( random.randint(100000,999999))
     
     
@@ -573,19 +620,14 @@ def placeorder(request):
         coup = coupon.objects.get(coupon_code=coupons)
         discount = coup.discount
         del request.session['coupons']
-       
-    
 
+    
     
      
     
     for item in cart_ids:
            cart_total_price +=item.product.price * item.product_qty
     cart_total_price -=discount
-   
-    
-    
-   
     orders = order.objects.create(
        user=request.user,
        total_price=cart_total_price,
@@ -618,6 +660,7 @@ def placeorder(request):
                 
                     )
         ordersitem.save()
+    
     #dcsrc quantiy from admin stock
     for item in cart_ids:
         productz=product_list.objects.filter(id=item.product_id).first()
@@ -629,12 +672,44 @@ def placeorder(request):
     return redirect('orderview')
     
 
-#show myorder
+#-----------------------------------------show myorder--------------------------
+def refund(request):
+    tr_id=request.session['tracking_no'] 
+    
+    ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
+    if ord.payment_mode == 'razorpay':
+            paymentid=ord.payment_id
+            amount=ord.total_price
+            client = razorpay.Client(auth=('rzp_test_Q76eqQekpYrXb6','YVThyYWz0AaRdOYxnhukMJ01'))
+            refund_amount = int(amount) * 100
+            response = client.payment.refund(paymentid, refund_amount)
+            status='refund'
+            ord.status=status
+            ord.save()
+            
+            return redirect(cancelsuccess)
+    else:
+         return redirect(cancelsuccess)
+    # return render(request,'test.html',context)
+def refundsuccess(request):
+     return render(request,'orders/refund.html')
+     
+
+
+def cancelsuccess(request):
+        tr_id=request.session['tracking_no'] 
+        del request.session['tracking_no'] 
+        ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
+        amount=ord.total_price
+        payment_mode=ord.payment_mode
+        return render(request,'orders/usercancel.html',{'amount':amount,'payment_mode':payment_mode})
 
 def orderview(request):
     u=request.user
     total=0
-    oderz=order.objects.filter(user=u)
+    oderz=order.objects.filter(user=u).order_by('-id')
+
+   
     
     ff={
         'oderz':oderz,
@@ -645,6 +720,7 @@ def orderview(request):
 
 def vieworder(request,tr_id):
     total=0
+    
     ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
     ord_itm=orderitem.objects.filter(orderit=ord)
     for item in ord_itm:
@@ -652,25 +728,29 @@ def vieworder(request,tr_id):
         
    
     delivered=ord.status=='Delivered'    
+   
+    button=ord.payment_mode
     
     
  
-    context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered,'total':total}
+    context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered,'total':total,'button':button}
     
     return render(request,'orders/userorderview.html',context)
+
 
 
 def cancelorders(request,pk):
     if request.user.is_authenticated:
         orders=order.objects.get(id=pk)
+        ord=order.objects.filter(id=pk).first()
         orders.status = 'Cancelled'
         orders.save()
         ord_itm=orderitem.objects.filter(orderit=orders.id)
         for i in ord_itm:
              i.status = 'Cancelled'
              i.save()
-
-        return redirect('orderview')
+        request.session['tracking_no']= ord.tracking_no
+        return redirect(refund)
     
 
 def orderdel(request):
@@ -706,34 +786,28 @@ def my_orders(request):
 
 #-------------------------coupon-----------------------------------------------
 def applycoupon(request):
-    print('hello')
-    # if coupon in request.session:
-    #     messages.info(request,'only one coupon is allowed')
-    #     return redirect("checkout")
-
     if request.method == 'POST':
-       
         coupons=request.POST.get("coupon")
-        coup=coupon.objects.filter(coupon_code=coupons)
-    
-     
-        print('visted 123opooppo')
-        # try:
-        #     used_coupon = Used_Coupon.objects.get(user=request.user,coupon = coup)
-        #     if used_coupon:
-        #          print('visted 123')
-        #          messages.info(request,'Coupon already used')
-        #          return redirect("checkout")
-        # except:
-        #     print('jhgjhgjhgjh')
-
-        if coup:
+        ued=Used_Coupon.objects.filter(user=request.user)
+        coup=coupon.objects.filter(coupon_code=coupons).first()
+        
+        for item in ued:
+             if item.coupon.coupon_code == coupons:
+                   used=True
+             else:
+                  used=False
+        
+        if used == True:
+             messages.info(request,' coupon is used')
+             return redirect('checkout')
+             
+        else:   
+           if coup:
             
             request.session['coupons'] = coupons
             return redirect("checkout")
-        else:
+           else:
             messages.info(request,'invalid coupon')
-            print('invalid')
             return redirect("checkout")
                  
 #--------------------------search---------------------------------------------#
@@ -836,12 +910,10 @@ def verification_payment(request):
     cart_total_price = 0
     payment_id= request.POST.get('razorpay_payment_id','')
     cart_total_price = 0
-    dd=request.user
+    
     payment_mod='razorpay'
    
     dd_id=request.user.id
-    user_ids=User.objects.get(username=dd)
-    addrssz=userdetails.objects.filter(is_default=True,user=request.user)
     cart_ids=carts.objects.filter(user=dd_id)
     tracking_no =( random.randint(100000,999999))
     if 'coupons' in request.session:
@@ -1111,7 +1183,7 @@ def delete_wishlist(request,id):
     
     wishlists.delete()
     return redirect('wishlists')
-
+#-------------------------------------------profile-----------------------
 def edit_profile(request):
     try:
         user_profile = UserProfilepic.objects.get(user=request.user)
@@ -1131,7 +1203,7 @@ def delete_profile_picture(request):
    print(user_profile)
    user_profile.delete()
    return redirect('userdetails')
-
+#---------------------------------userprofile---------------------------
 def wallets(request):
     amount=0
     total=0
