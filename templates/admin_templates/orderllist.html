@@ -108,23 +108,26 @@
                 </td>     
                 
                    {% if item.status == 'Out_for_delivery'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-primary">{{item.status}}</button></button></a> </td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-primary">{{item.status}}</button></a> </td>
                   {% elif item.status == 'Confirmed'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></button></a> </td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a> </td>
                   {% elif item.status == 'Shipped'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-warning">{{item.status}}</button></button></a> </td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-warning">{{item.status}}</button></a> </td>
                   {% elif item.status == 'Pending'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-danger">{{item.status}}</button></button></a> </td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-danger">{{item.status}}</button></a> </td>
                   {% elif item.status == 'Delivered'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></button></a> </td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a> </td>
                   {% elif item.status == 'Cancelled'%}
-                  <td> <a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></button></a></td>
+                  <td> <a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a></td>
                   {% elif item.status == 'refund'%}
-                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></button></a></td>
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a></td>
+                  {% elif item.status == 'Returned'%}
+                  <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a></td>
                   {% endif %}
-                  <td><a href="canclorder/{{item.id}}"><button class="btn btn-danger">Cancel the order</button></button></a> </td>
+                  
+                  <td><a href="canclorder/{{item.id}}"><button class="btn btn-danger">Cancel </button></a> </td>
                   <td><a href="{% url 'vieworders' item.tracking_no %}" class="btn btn-primary">View</a></td>
-                  <td><a href="deleteord/{{item.id}}"><button class="btn btn-danger">Delete</button></button></a> </td>  
+                  <td><a href="deleteord/{{item.id}}"><button class="btn btn-danger">Delete</button></a> </td>  
                     
                </tr>
             

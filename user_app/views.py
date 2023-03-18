@@ -628,49 +628,53 @@ def placeorder(request):
     for item in cart_ids:
            cart_total_price +=item.product.price * item.product_qty
     cart_total_price -=discount
-    orders = order.objects.create(
-       user=request.user,
-       total_price=cart_total_price,
-       address=userdetails.objects.get(is_default=True,user=request.user),
-       tracking_no=tracking_no,
-       payment_mode=payment_mod,
-       payment_id=payment_id,
-       status='Confirmed',
-       discountprice=discount,
-       
-    )
-    orders.save()
-    grandtotals =sucessamount.objects.create(
-        user=request.user,
-        grandtotal=cart_total_price
-    )
     
-    grandtotals.save()
-    for item in cart_ids:
-        total=item.product.price*item.product_qty
-
-        ordersitem = orderitem.objects.create(
+    if userdetails.objects.filter(is_default=True,user=request.user):
+                orders = order.objects.create(
                 user=request.user,
-                orderit=orders,
-                product=item.product,
-                price=item.product.price,
-                quantity=item.product_qty,
-                total=total,
-
+                total_price=cart_total_price,
+                address=userdetails.objects.get(is_default=True,user=request.user),
+                tracking_no=tracking_no,
+                payment_mode=payment_mod,
+                payment_id=payment_id,
+                status='Confirmed',
+                discountprice=discount,
                 
-                    )
-        ordersitem.save()
-    
-    #dcsrc quantiy from admin stock
-    for item in cart_ids:
-        productz=product_list.objects.filter(id=item.product_id).first()
-        productz.quantity=productz.quantity-item.product_qty
-        productz.save()
-    cart_ids.delete()
-    
-    
-    return redirect('orderview')
-    
+                )
+                orders.save()
+                grandtotals =sucessamount.objects.create(
+                    user=request.user,
+                    grandtotal=cart_total_price
+                )
+                
+                grandtotals.save()
+                for item in cart_ids:
+                    total=item.product.price*item.product_qty
+
+                    ordersitem = orderitem.objects.create(
+                            user=request.user,
+                            orderit=orders,
+                            product=item.product,
+                            price=item.product.price,
+                            quantity=item.product_qty,
+                            total=total,
+
+                            
+                                )
+                    ordersitem.save()
+                
+                #dcsrc quantiy from admin stock
+                for item in cart_ids:
+                    productz=product_list.objects.filter(id=item.product_id).first()
+                    productz.quantity=productz.quantity-item.product_qty
+                    productz.save()
+                cart_ids.delete()
+                
+                
+                return redirect('orderview')
+    else:
+                messages.success(request,' Please select Address')
+                return redirect(checkout)
 
 #-----------------------------------------show myorder--------------------------
 def refund(request):
@@ -790,12 +794,11 @@ def applycoupon(request):
         coupons=request.POST.get("coupon")
         ued=Used_Coupon.objects.filter(user=request.user)
         coup=coupon.objects.filter(coupon_code=coupons).first()
-        
+        used=False
         for item in ued:
              if item.coupon.coupon_code == coupons:
                    used=True
-             else:
-                  used=False
+             
         
         if used == True:
              messages.info(request,' coupon is used')
@@ -1141,8 +1144,7 @@ def placeaddaddress(request):
                                                country=country,
                                                user=user)
             newaddress.save()
-       
-        return redirect(checkout)
+            return redirect(checkout)
     return render(request,'user/addnewaddress.html')
 
 #-----------------------------wishlist---------------------------------------
