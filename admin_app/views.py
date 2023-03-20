@@ -239,7 +239,7 @@ def update_carousel(request,pk):
 
 #------------------------------------order-------------------------------------------------------------------------------------------
 def orders(request):
-    ord=order.objects.all()
+    ord=order.objects.all().order_by('-id')
     return render(request,'admin_templates/orderllist.html',{"ord":ord})
 
 def ordstatus(request,id):
@@ -252,7 +252,6 @@ def ordstatus(request,id):
          ord.status='Delivered'
     
     ord.save()
-    print(ord)
     return redirect('orders')
 
 def canclorder(request,id):

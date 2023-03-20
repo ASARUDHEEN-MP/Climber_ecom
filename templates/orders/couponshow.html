@@ -1,0 +1,134 @@
+{% comment %} {% for item in Used_Coupons %}
+
+
+<h1>{{item.coupon.coupon_code}}</h1>
+
+
+{% endfor %}
+{% for i in coupons %}
+<h1> {{i.coupon_code}}</h1>
+{% endfor %} {% endcomment %}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <style>
+        .coupon-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.coupon {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 30%;
+  margin-bottom: 20px;
+}
+
+.coupon-header {
+  text-align: center;
+}
+
+.coupon-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.coupon-body {
+  margin-top: 20px;
+}
+
+.coupon-body p {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.coupon-body strong {
+  font-weight: bold;
+}
+
+          
+          
+        </style>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    
+   
+</head>
+<body >
+ {% if coupons %}   
+    <h1 class="text-center">Available Coupon<h1>
+    <div class="coupon-row">
+        {% for i in coupons%}
+        
+       
+        <div class="coupon">
+          <div class="coupon-header">
+            <h2>Code:   {{i.coupon_code}}</h2>
+          </div>
+          
+          <div class="coupon-body">
+            <p style="color:green;"> copy The Code</p>
+            <h4 style="color:red;">Amount :{{i.discount | stringformat:'d' }}</h4 >
+            <p><span style="color:green;">Active</span><p>
+          </div>
+          <form method="post" action="{% url 'applycoupon' %}">
+            {%csrf_token%}
+        <div class="card mb-4">
+           
+            
+                <input type="hidden" id="form1"  name="coupon" value="{{i.coupon_code}}" />
+                
+               
+            
+              <button type="submit" class="btn btn-outline-warning btn-lg ms-2">Redeem</button>
+       
+        
+          </div>
+          
+        </form>
+        </div>
+        
+       
+     {% endfor %}
+     
+     
+        
+      </div>
+     
+      {%else %}
+      <h1 class="text-danger text-center">NO More coupon</h1>
+      {% endif %}
+      <hr>
+      {% if Used_Coupons %}
+      <h1 class="text-center">Used Coupon<h1>
+      
+        <div class="coupon-row">
+            {% for i in Used_Coupons%}
+            
+            <div class="coupon">
+              <div class="coupon-header">
+                <h2>{{i.coupon.coupon_code}}</h2>
+              </div>
+              <div class="coupon-body">
+               
+                <h4 style="color:red;">Amount :{{i.coupon.discount | stringformat:'d' }}</h4 >
+                
+              </div>
+              
+            </div>
+            
+         {% endfor %}
+          
+           
+          {% endif %}
+            
+          </div>
+      
+</body>
+</html>

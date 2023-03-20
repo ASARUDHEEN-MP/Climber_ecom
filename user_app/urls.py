@@ -90,5 +90,8 @@ path('delete_profile_picture',views.delete_profile_picture,name='delete_profile_
    
 #wallet
 path('wallet',views.wallets,name="wallet"),
-path('walletamount',views.walletamount,name="walletamount")
+path('walletamount',views.walletamount,name="walletamount"),
+path('razorpayrefund',views.razorpayrefund,name="razorpayrefund"),
+
+path('couponshow',views.couponshow,name="couponshow"),
 ]

@@ -124,8 +124,11 @@
                   {% elif item.status == 'Returned'%}
                   <td><a href="ordstatus/{{item.id}}"><button class="btn btn-success">{{item.status}}</button></a></td>
                   {% endif %}
-                  
+                  {% if item.status != "refund"%}
                   <td><a href="canclorder/{{item.id}}"><button class="btn btn-danger">Cancel </button></a> </td>
+                  {% else %}
+                  <td>Refund</td>
+                  {% endif %}
                   <td><a href="{% url 'vieworders' item.tracking_no %}" class="btn btn-primary">View</a></td>
                   <td><a href="deleteord/{{item.id}}"><button class="btn btn-danger">Delete</button></a> </td>  
                     

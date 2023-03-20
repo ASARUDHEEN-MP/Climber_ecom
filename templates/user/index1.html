@@ -61,7 +61,7 @@
                   <li class="nav-item">
                      <a class="nav-link" href="{% url 'about' %}">About</a>
                   </li>
-                  
+                 
                  
                   
                   <li class="nav-item">
@@ -184,11 +184,13 @@
                 
 
                   <!-- start for loop -->
-            {% for item in categorys %}
+            {% for item in page_data %}
+           
             <div class="cycle_section_2 layout_padding">
                <div class="row">
                   <div class="col-md-6">
                      <div class="box_main">
+                        <a href="{% url 'collection_view' item.slug %}">
                         <h6 class="number_text">{{forloop.counter}}</h6>
                         <div class="image_2"><img src="{{item.image.url}}"></div>
                      </div>
@@ -196,15 +198,18 @@
                   <div class="col-md-6">
                      <h1 class="col d-grid cycle_taital">{{item.category_name}}<hr></h1>
                      
+                    
                      <p class="lorem_text">{{item.description}}</p>
+                  </a>
                      <div class="btn_main">
                         
                         <div class="buy_bt"><a href="{% url 'collection_view' item.slug %}">View</a></div>
-                        
+                    
                      </div>
                   </div>
                </div>
             </div>
+       
             {% endfor %}
             
            
@@ -237,7 +242,7 @@
                  {% for i in page_data.paginator.page_range %}
                    {% if page_data.number == i %}
                      <li class="page-item active"><a class="page-link bg-dark" href="#">{{ i }}</a></li>
-                   {% elif i > page_data.number|add:'-2' and i < page_data.number|add:'2' %}
+                   {% elif i > page_data.number|add:'-4' and i < page_data.number|add:'4' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                    {% endif %}
                  {% endfor %}

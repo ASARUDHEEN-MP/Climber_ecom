@@ -76,7 +76,7 @@ class order(models.Model):
     created_at=models.DateTimeField(auto_now=True)
     updated_at=models.DateTimeField(auto_now=True)
     discountprice=models.FloatField(default=0)
-
+    walletamount=models.FloatField(default=0)
     def __str__(self) -> str:
         return '{}-{}'.format(self.id,self.tracking_no)
 

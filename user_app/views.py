@@ -36,7 +36,8 @@ import uuid
 def index(request):
     categorys = Categorys.objects.filter(status=0)
     carosuelS=carosuel.objects.get()
-    paginator = Paginator(categorys,2)
+    paginator = Paginator(categorys,4)  # 10 items per page
+
     page = request.GET.get('page')
     try:
                 page_data = paginator.page(page)
@@ -121,9 +122,9 @@ def signup(request):
         else:
             
             message = generate_otp()
-            sender_email = "asarudheen9472@gmail.com"
+            sender_email = "climbercycles@gmail.com"
             receiver_email = email
-            passwords = "xazwlscvvoizwvlm"
+            passwords = "qbqlzqfquwmstnpv"
             subject = "Climber create account  OTP"
             X = message
             
@@ -456,8 +457,9 @@ def checkout(request):
     dd=request.user
     discount = 0
     button=0
-    
-    
+    used=0
+    coupons=0
+    Used_Coupons=0
     addrssz=userdetails.objects.filter(is_default=True,user=request.user)
     cartitems=carts.objects.filter(user=dd)
     address=userdetails.objects.filter(user=dd)
@@ -473,12 +475,17 @@ def checkout(request):
         coupss=coup.coupon_code
         discount = coup.discount
         messages.info(request,'')
-        Used_Coupon.objects.create(user = user,coupon = coup )
+        
+        Used_Coupons=Used_Coupon.objects.filter(user=request.user) 
+        for i in Used_Coupons:
+            used=i.coupon.coupon_code
+        if coupons != used:
+            Used_Coupon.objects.create(user = user,coupon = coup )
     coupen=coupon.objects.all()
     m=total
     grand_total += total-discount
     
-    context={'cartitems':cartitems,'grand_total':grand_total,'address':address,'addrssz':addrssz,'discount':discount,'m':m,'coupen':coupen,'button':button}
+    context={'cartitems':cartitems,'grand_total':grand_total,'address':address,'addrssz':addrssz,'discount':discount,'m':m,'coupen':coupen,'button':button,'Used_Coupons':Used_Coupons}
     return render(request,'user/usercheckout.html',context)
 
 
@@ -570,7 +577,7 @@ from django.db.models import Q
 def test(request):
     ued=Used_Coupon.objects.filter(user=request.user)
     
-    return render(request,'test.html')
+    return render(request,'test.html',{'ued':ued})
 
 
 #addess set up for order----
@@ -679,7 +686,7 @@ def placeorder(request):
 #-----------------------------------------show myorder--------------------------
 def refund(request):
     tr_id=request.session['tracking_no'] 
-    
+    orders=userwallets.objects.filter(user=request.user)
     ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
     if ord.payment_mode == 'razorpay':
             paymentid=ord.payment_id
@@ -690,7 +697,10 @@ def refund(request):
             status='refund'
             ord.status=status
             ord.save()
-            
+            print(ord.walletamount)
+            for i in orders:
+              i.walletamount += ord.walletamount
+              i.save()
             return redirect(cancelsuccess)
     else:
          return redirect(cancelsuccess)
@@ -731,13 +741,13 @@ def vieworder(request,tr_id):
         total+=item.total
         
    
-    delivered=ord.status=='Delivered'    
+    delivered =  ord.status=='Delivered'    
    
     button=ord.payment_mode
     
     
  
-    context={'ord':ord,'ord_itm':ord_itm,'delivered':delivered,'total':total,'button':button}
+    context={'ord':ord,'ord_itm':ord_itm,'total':total,'button':button,'delivered':delivered}
     
     return render(request,'orders/userorderview.html',context)
 
@@ -756,7 +766,7 @@ def cancelorders(request,pk):
         request.session['tracking_no']= ord.tracking_no
         return redirect(refund)
     
-
+ 
 def orderdel(request):
     ords=order.objects.filter(user=request.user).first()
     if ords.status == 'Cancelled':
@@ -771,7 +781,7 @@ def pay(request):
 #test
 @csrf_exempt
 def my_orders(request):
-
+    total=0
     usr=sucessamount.objects.filter(user=request.user)
     for item in usr:
       total=item.grandtotal
@@ -875,13 +885,36 @@ class GenerateOrderInvoicePDF(View):
 #------------------------------razorpay-----------------------------------------
 from django.conf import settings
 def payit(request):
+    payment=0
+    total=0
+    totals=0
+    walletamount=0
+    walletbalance=0
+    addaddress=0
     if request.method == 'POST':
         payment_mod= request.POST.get('payment_mode')
-        total=int(request.POST.get('total'))
+        totals=int(request.POST.get('total'))
         phone=request.POST.get('phone')
-        name=request.POST.get('name')
-       
-       
+        name=request.POST.get('name') 
+             
+        #wallet
+        orders=userwallets.objects.filter(user=request.user)
+        for item in orders:
+          walletamount += item.walletamount
+          walletamount=walletamount
+        walletbalance=walletamount
+        if walletamount<=totals:
+            total=totals-walletamount
+            walletamount=0
+            afterwallet=walletamount
+            request.session['afterwallet'] = afterwallet
+            request.session['total'] = total
+        else:
+             walletamount -= totals
+             total=1
+             afterwallet=walletamount
+             request.session['afterwallet'] = afterwallet
+             request.session['total'] = total
         client = razorpay.Client(auth=('rzp_test_Q76eqQekpYrXb6','YVThyYWz0AaRdOYxnhukMJ01'))
 
         DATA = {
@@ -899,7 +932,12 @@ def payit(request):
             'total':total,
             'phone':phone,'name':name,
             'id' :str( payment['id']),
-             
+             'walletamount':walletamount,
+             'payment':payment,
+             'totals':totals,
+             'walletbalance':walletbalance,
+             'afterwallet':afterwallet,
+             'addaddress':addaddress
         }
         
         return render(request,'pay/payit.html',context)
@@ -908,14 +946,14 @@ def payit(request):
 @csrf_exempt 
 def verification_payment(request):
     total=0
+    totals=0
     discount=0
     
     cart_total_price = 0
     payment_id= request.POST.get('razorpay_payment_id','')
-    cart_total_price = 0
-    
+    walletbalance=request.session['afterwallet'] 
+    total=request.session['total'] 
     payment_mod='razorpay'
-   
     dd_id=request.user.id
     cart_ids=carts.objects.filter(user=dd_id)
     tracking_no =( random.randint(100000,999999))
@@ -926,11 +964,11 @@ def verification_payment(request):
         discount = coup.discount
         
     for item in cart_ids:
-        total+=item.product.price*item.product_qty
+        totals+=item.product.price*item.product_qty
         
 
-    total -=discount
-   
+    totals -=discount
+    walletamounts=float(totals)-float(total)
     orders = order.objects.create(
        user=request.user,
        total_price=total,
@@ -940,6 +978,7 @@ def verification_payment(request):
        payment_id=payment_id,
        status='Confirmed',
        discountprice=discount,
+       walletamount=walletamounts
     )
     orders.save()
     grandtotals =sucessamount.objects.create(
@@ -962,10 +1001,18 @@ def verification_payment(request):
                 total=item.total,
                     )
         ordersitem.save()
-    productz=product_list.objects.filter(id=item.product_id).first()
-    productz.quantity=productz.quantity-item.product_qty
-    productz.save()
-    cart_ids.delete()
+        productz=product_list.objects.filter(id=item.product_id).first()
+        productz.quantity=productz.quantity-item.product_qty
+        productz.save()
+        cart_ids.delete()
+    wallet=userwallets.objects.filter(user=request.user)
+    wallet.delete()
+    ordersitem = userwallets.objects.create(
+                user=request.user,
+                walletamount=walletbalance
+                )
+    del request.session['afterwallet'] 
+    del request.session['total'] 
     return redirect(my_orders)
         
 
@@ -1004,6 +1051,7 @@ def changepassword(request):
     
     return render(request,'resetpassword/newpassword.html')
 #-------------------------forgetpassword-------------------------------
+
 def ForgetPassword(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -1012,10 +1060,10 @@ def ForgetPassword(request):
         if User.objects.filter(username=username,email=email).first():
                
                 message =generate_otp()
-                sender_email = "asarudheen9472@gmail.com"
+                sender_email = "climbercycles@gmail.com"
                 receiver_email = email
                 subject = "Reset Password OTP"
-                passwords = "xazwlscvvoizwvlm" 
+                passwords = "qbqlzqfquwmstnpv" 
                 X = message
                 request.session['otp'] = X
             
@@ -1095,22 +1143,19 @@ def returns(request,tr_id):
    ord=order.objects.filter(tracking_no=tr_id).filter(user=request.user).first()
    total=ord.total_price
    grandtotal=total-ord.discountprice
-   print(ord.discountprice)
-   wallets=userwallets.objects.create( user = request.user,
-    
-        walletamount=grandtotal
-    )
-   wallets.save()
-    
-   if  ord.status =='Delivered':
-        ord.status='Returned'
-        
-   ord.save()
-   
-    
-    
-    
-    
+   if ord.payment_mode == 'cod':
+        wallets=userwallets.objects.create( user = request.user,
+            
+                walletamount=grandtotal
+            )
+        wallets.save()
+            
+        if  ord.status =='Delivered':
+                ord.status='Returned'
+                ord.save()
+   else:
+       request.session['tracking_no']= ord.tracking_no 
+       return redirect(refund)
    return redirect('orderview')
 
 def placeaddaddress(request):
@@ -1305,10 +1350,19 @@ def walletamount(request):
         messages.info(request,'Wallet has insufficent balance')
         return redirect('checkout')
                 
-                    
+
+def razorpayrefund(request):
+     return redirect("cancelorders")                  
         
 
+def couponshow(request):
     
+     coupons=coupon.objects.all()
+     Used_Coupons=Used_Coupon.objects.filter(user=request.user)
+     coupons = coupon.objects.filter(is_active=True).exclude(used_coupon__user=request.user)
+
+     context={'Used_Coupons':Used_Coupons,'coupons':coupons}
+     return render(request,'orders/couponshow.html',context)   
     
     
     

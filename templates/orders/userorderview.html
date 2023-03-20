@@ -65,6 +65,9 @@
                                                 
                                                
                                                  <h4>Discount:<span class="float-end">{{ord.discountprice}}</span></h4> 
+                                                 {% if ord.payment_mode == 'razorpay'%}
+                                                 <h4>wallet:<span class="float-end">{{ord.walletamount}}</span></h4>
+                                                 {% endif %}
                                                  <h4 class="text-success">Delivery Charge:<span class="float-end">  Free</span></h4> 
                                                 <hR>
                                                 
@@ -78,6 +81,9 @@
                                             {% if delivered %}
                                             <a href="{% url 'returns' ord.tracking_no %}" class="btn btn-danger float-end text-white" >Return</a>
                                             {% endif %}
+                                            {% comment %} {% if ord.status == 'Delivered' %}
+                                                 <a href="{% url 'returns' ord.tracking_no %}" class="btn btn-danger float-end text-white" >Return</a>
+                                            {% endif %} {% endcomment %}
                                             
                                             <a href="{% url 'generate_order_invoice' order_id=ord.tracking_no%}" class="btn btn-primary float-end text-white" >Download invoice</a>
                                             <a href="{%url 'test'%}">

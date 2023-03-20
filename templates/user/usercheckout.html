@@ -192,32 +192,30 @@
                                      
                                          <!--coupon-->
                                     
-                                                <p class=" text-success";>Available Coupon</p>
-                                            <div class="input-group mt-3">
-                                                {% for item in coupen %}
-                                                <input  class="form-control rounded " placeholder="{{item.coupon_code}}" />
-                                                {% endfor %}
-                                              </div>
+                                             
+                                              
                                               <div style="color: rgb(103, 236, 14);">
                         
                                               
                                               </div>
                                           
-                                            <form method="post" action="{% url 'applycoupon' %}">
+                                            {% comment %} <form method="post" action="{% url 'applycoupon' %}">
                                                 {%csrf_token%}
                                             <div class="card mb-4">
                                                 <div class="card-body p-1 d-flex flex-row">
                                                   <div class="form-outline flex-fill">
                                                     <input type="text" id="form1" class="form-control form-control-lg" placeholder="Discound code"  name="coupon" aria-label="Search" aria-describedby="search-addon"  />
                                                     
-                                                    {% comment %} {% for messag in messages %}
-                                                        <h6 style="color: red;">{{messag}}</h6>
-                                                    {%endfor%} {% endcomment %}
+                                                   
                                                   </div>
                                                   <button type="submit" class="btn btn-outline-warning btn-lg ms-2">Apply</button>
+                                                  
                                                 </div>
+                                            
                                               </div>
-                                            </form>
+                                              
+                                            </form> {% endcomment %}
+                                            <a href="{% url 'couponshow' %}" class="ml-50"> My Coupons</a>
 
                                         <div class="payment-method">
 
@@ -246,7 +244,7 @@
                                             <button class="btn btn-success w-100 mt-3 mb-2">Cash On Delivery</button>
                                             
                                         </form> 
-                                        <a href="walletamount"><button class="btn btn-warning w-100 mt-1 mb-5">Wallet</button></a>
+                                       
                                         </div>
                                     </div>
                                 </div>
