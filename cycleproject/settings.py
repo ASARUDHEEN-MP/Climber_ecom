@@ -80,15 +80,24 @@ WSGI_APPLICATION = 'cycleproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES={
-   'default':{
-      'ENGINE':'django.db.backends.postgresql_psycopg2',
-      'NAME':'ecommerce',
-      'USER':'postgres',
-      'PASSWORD':'asarudheen12',
-      'HOST':'localhost',
-      'PORT':'5432',
-   }
+# DATABASES={
+#    'default':{
+#       'ENGINE':'django.db.backends.postgresql_psycopg2',
+#       'NAME':'ecommerce',
+#       'USER':'postgres',
+#       'PASSWORD':'asarudheen12',
+#       'HOST':'localhost',
+#       'PORT':'5432',
+#    }
+# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ecommerce',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+    }
 }
 
 

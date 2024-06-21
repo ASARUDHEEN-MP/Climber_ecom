@@ -24,6 +24,7 @@ import smtplib
 import secrets
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger
+from . import mail
 
 
 
@@ -35,7 +36,8 @@ import uuid
 @cache_control(no_cache = True,must_revalidate = False,no_store = True)
 def index(request):
     categorys = Categorys.objects.filter(status=0)
-    carosuelS=carosuel.objects.get()
+    carosuelS=carosuel.objects.all()
+    print(carosuelS)
     paginator = Paginator(categorys,4)  # 10 items per page
 
     page = request.GET.get('page')
@@ -121,32 +123,20 @@ def signup(request):
       
         else:
             
-            message = generate_otp()
-            sender_email = "climbercycles@gmail.com"
-            receiver_email = email
-            passwords = "qbqlzqfquwmstnpv"
-            subject = "Climber create account  OTP"
-            X = message
-            
-            request.session['otp'] = X
-            
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.ehlo()
-            server.starttls()
-            server.login(sender_email, passwords)
-            message = 'Subject: {}\n\n{}'.format(subject, message)
-            server.sendmail(sender_email, receiver_email, message)
-            server.quit()
+            mailsuccess=mail.createotpforuser(email)
+            print(mailsuccess,"here is the result")
+            if mailsuccess:
+                request.session['otp'] = mailsuccess
+                request.session['names'] = username
+                request.session['mails'] = email
+                request.session['passwrds'] = password
+                return redirect('verify_login')
+            else:
+                 return {"message":"something wend wrong when generating otp"}
+    
             
            
             
-            request.session['names'] = username
-            request.session['mails'] = email
-            request.session['passwrds'] = password
-           
-            
-
-            return redirect('verify_login')
 
     return render(request,'signup.html')
 
@@ -157,20 +147,22 @@ def signup(request):
 
 #-----------------------------------otp---------------------------------
 
-def generate_otp(length=6):
-    return ''.join(secrets.choice("0123456789") for i in range(length))
+
+
+
 
 
 def verify_login(request):
     
-    otp = request.session['otp'] 
-   
+    otp = request.session.get('otp')
+    otps=otp["otp"]
+    print(otps)
     if request.method =='POST':
        
         OTP =request.POST['otp']
         
-    
-        if OTP == otp:
+        
+        if OTP == otps:
            del request.session['otp'] 
            
            
@@ -269,7 +261,7 @@ def collection_view(request,slug):
       productt=product_list.objects.filter(category__slug=slug)
       cat_name=Categorys.objects.filter(slug=slug).first()
       categorys = Categorys.objects.filter(status=0)
-      carosuelS=carosuel.objects.get()
+      carosuelS=carosuel.objects.all()
 
       paginator = Paginator(productt,6)  # 10 items per page
 
@@ -306,7 +298,7 @@ def collection_view(request,slug):
 
 def allproducts(request):
     productt=product_list.objects.all()
-    carosuelS=carosuel.objects.get()
+    carosuelS=carosuel.objects.all()
     categorys = Categorys.objects.filter(status=0)
     
     
